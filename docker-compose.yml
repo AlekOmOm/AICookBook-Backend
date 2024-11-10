@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   backend:
-    image: "${DOCKER_USERNAME}/AICookBook-Backend:latest"
+    image: "${DOCKER_USERNAME}/aicookbook-backend:latest"
     ports:
       - "8080:8080"
     environment:
@@ -15,7 +15,7 @@ services:
       - database
 
   APIClient:
-    image: "${DOCKER_USERNAME}/AICookBook-APIClient:latest"
+    image: "${DOCKER_USERNAME}/aicookbook-apiclient:latest"
     ports:
       - "3000:3000"
     depends_on:
