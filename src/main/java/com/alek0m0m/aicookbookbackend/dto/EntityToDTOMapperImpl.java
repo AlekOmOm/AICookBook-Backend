@@ -1,6 +1,7 @@
-package com.alek0m0m.aicookbookbackend;
+package com.alek0m0m.aicookbookbackend.dto;
 
 import com.Alek0m0m.library.jpa.EntityToDTOMapper;
+import com.alek0m0m.aicookbookbackend.model.Recipe;
 import org.springframework.stereotype.Service;
 
 @Service

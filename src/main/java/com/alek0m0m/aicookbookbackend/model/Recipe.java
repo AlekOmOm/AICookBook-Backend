@@ -1,4 +1,4 @@
-package com.alek0m0m.aicookbookbackend;
+package com.alek0m0m.aicookbookbackend.model;
 
 import com.Alek0m0m.library.jpa.BaseEntity;
 import jakarta.persistence.Entity;

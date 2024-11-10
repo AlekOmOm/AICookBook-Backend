@@ -1,10 +1,9 @@
-package com.alek0m0m.aicookbookbackend;
+package com.alek0m0m.aicookbookbackend.dto;
 
 import com.Alek0m0m.library.jpa.BaseEntityDTO;
+import com.alek0m0m.aicookbookbackend.model.Recipe;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 
 @Getter
