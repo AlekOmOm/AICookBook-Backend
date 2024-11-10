@@ -14,8 +14,8 @@ services:
     depends_on:
       - database
 
-  frontend:
-    image: "${DOCKER_USERNAME}/eventor-frontend:latest"
+  APIClient:
+    image: "${DOCKER_USERNAME}/AICookBook-APIClient:latest"
     ports:
       - "3000:3000"
     depends_on:
