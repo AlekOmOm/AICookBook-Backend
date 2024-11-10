@@ -118,7 +118,7 @@
                 <configuration>
                     <excludes>
                         <!--- unfinished test files  TODO: Remove once Test classes fully functional -->
-                        <exclude>**/EventorAppApplicationTests.java</exclude>
+                        <exclude>**/AiCookBookBackendApplicationTests.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>

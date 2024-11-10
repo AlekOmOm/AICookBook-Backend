@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   backend:
-    image: "${DOCKER_USERNAME}/eventor-app:latest"
+    image: "${DOCKER_USERNAME}/${DOCKER_IMAGE_NAME}:latest"
     ports:
       - "8080:8080"
     environment:
