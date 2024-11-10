@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class RecipeRESTController extends BaseRESTController<Recipe, RecipeDTO, RecipeService, RecipeRepository> {
-    public RecipeRESTController() {
-        super(null);
+    public RecipeRESTController( RecipeService service) {
+        super(service);
     }
+
+
 }
