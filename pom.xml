@@ -70,28 +70,11 @@
             <artifactId>reactor-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.Alek0m0m</groupId>
-            <artifactId>library-spring</artifactId>
-            <version>2.1.8</version>
-        </dependency>
-        <dependency>
-            <groupId>com.Alek0m0m</groupId>
-            <artifactId>library-jpa</artifactId>
-            <version>2.1.8</version>
-        </dependency>
-        <dependency>
-            <groupId>com.Alek0m0m</groupId>
-            <artifactId>library-core</artifactId>
-            <version>2.1.8</version>
-        </dependency>
+
+
     </dependencies>
     <repositories>
-        <repository>
-            <id>github</id>
-            <name>GitHub AlekOmOm Packages</name>
-            <url>https://maven.pkg.github.com/AlekOmOm/library</url>
-        </repository>
+
     </repositories>
     <build>
         <plugins>
@@ -120,6 +103,17 @@
                         <!--- unfinished test files  TODO: Remove once Test classes fully functional -->
                         <exclude>**/AiCookBookBackendApplicationTests.java</exclude>
                     </excludes>
+
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
         </plugins>
