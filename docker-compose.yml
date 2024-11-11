@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   backend:
-    image: "${DOCKER_USERNAME}/aicookbook-backend:latest"
+    image: "alekomom/aicookbook-backend:latest"
     build:
       context: .
       dockerfile: Dockerfile
@@ -15,20 +15,26 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
     depends_on:
-      - database
+      database:
+        condition: service_healthy
 
   database:
     image: mysql:8.0
     environment:
       MYSQL_DATABASE: ${ENV_DB_SCHEMA_NAME}
-      MYSQL_USER: ${ENV_DB_USERNAME}
-      MYSQL_ROOT_PASSWORD: ${ENV_DB_PASSWORD}
-      MYSQL_PASSWORD: ${ENV_DB_PASSWORD}
+      MYSQL_USER: ${DOCKER_DB_USERNAME}
+      MYSQL_PASSWORD: ${DOCKER_DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DOCKER_DB_ROOT_PASSWORD}
     ports:
-      - "3307:3306"  # port 3307 and 3306 are different, so we can run multiple MySQL containers
+      - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
       - ./src/main/resources/db/migration:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   db_data:
