@@ -21,7 +21,6 @@ import java.util.List;
 @JsonDeserialize(as = RecipeDTO.class)
 public class RecipeDTO extends BaseEntityDTO<Recipe> {
 
-
     private String name;
     private String instructions;
     private String tags;
