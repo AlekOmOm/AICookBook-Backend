@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/recipes")
+@RequestMapping("/api/recipes")
 public class RecipeRESTController extends BaseRESTController<Recipe, RecipeDTO, RecipeService, RecipeRepository> {
     public RecipeRESTController( RecipeService service) {
         super(service);
