@@ -13,6 +13,7 @@ import com.alek0m0m.aicookbookbackend.repository.RecipeRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -35,19 +36,20 @@ public class RecipeService extends BaseService<Recipe, RecipeDTO, RecipeReposito
 
     // --------------------- CRUD ---------------------
     @Override
+    @Transactional
     public RecipeDTO save(BaseEntityDTO<Recipe> entityDTO) {
         Recipe recipe = entityDTO.toEntity();
 
-        // Save ingredients
-        List<Ingredient> savedIngredients = recipe.getIngredients().stream()
-                .map(ingredient -> ingredientService.save(ingredientDTOMapper.apply(ingredient)).toEntity())
-                .collect(Collectors.toList());
+        List<IngredientDTO> ingredientDTOs = ingredientDTOMapper.applyAll(recipe.getIngredients());
 
         // Set saved ingredients to the recipe
-        recipe.setIngredients(savedIngredients);
+        recipe.setIngredients(ingredientService.saveAllIngredients(recipe.getIngredients()));
 
+        System.out.println("RecipeService.save: " + recipe);
+
+        RecipeDTO dto = new RecipeDTO();
         // Save recipe
-        return super.save(recipeDTOMapper.apply(recipe));
+        return dto;
     }
 
     @Override

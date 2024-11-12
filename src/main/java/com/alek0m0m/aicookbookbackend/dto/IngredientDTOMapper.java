@@ -5,6 +5,8 @@ import com.alek0m0m.aicookbookbackend.library.jpa.*;
 import com.alek0m0m.aicookbookbackend.model.Ingredient;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class IngredientDTOMapper implements EntityToDTOMapper<Ingredient, IngredientDTO> {
 
@@ -12,7 +14,7 @@ public class IngredientDTOMapper implements EntityToDTOMapper<Ingredient, Ingred
     public IngredientDTO map(Ingredient ingredient) {
         return mapRecipeToDTO(ingredient);
     }
-    
+
     public Ingredient map(IngredientDTO ingredientDTO) {
         return mapDTOToRecipe(ingredientDTO);
     }
@@ -40,4 +42,7 @@ public class IngredientDTOMapper implements EntityToDTOMapper<Ingredient, Ingred
         return ingredient;
     }
 
+    public List<IngredientDTO> applyAll(List<Ingredient> ingredients) {
+        return ingredients.stream().map(this::mapRecipeToDTO).toList();
+    }
 }

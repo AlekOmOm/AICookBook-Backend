@@ -7,15 +7,16 @@ import com.alek0m0m.aicookbookbackend.model.Ingredient;
 import com.alek0m0m.aicookbookbackend.model.Recipe;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 @Getter
 @Setter
@@ -32,35 +33,9 @@ public class RecipeDTO extends BaseEntityDTO<Recipe> {
     private int cookTime;
     private int totalTime;
     @OneToMany
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     @JsonProperty("ingredients")
     private List<IngredientDTO> ingredients;
-
-    /*
-    POST /api/recipes
-    {
-  "name": "Pasta",
-  "instructions": "Cook pasta, add tomato sauce",
-    "tags": "pasta, italian",
-    "servings": 2,
-    "prepTime": 5,
-    "cookTime": 10,
-    "totalTime": 15,
-
-  "ingredients": [
-    {
-      "name": "Pasta",
-      "quantity": 200,
-      "unit": "g"
-    },
-    {
-      "name": "Tomato sauce",
-      "quantity": 100,
-      "unit": "g"
-    }
-  ]
-}
-     */
-
 
     @Override
     public Recipe toEntity() {
@@ -73,14 +48,20 @@ public class RecipeDTO extends BaseEntityDTO<Recipe> {
         recipe.setPrepTime(getPrepTime());
         recipe.setCookTime(getCookTime());
         recipe.setTotalTime(getTotalTime());
-        recipe.setIngredients(ingredients.stream().map(ingredientDTO -> {
-            Ingredient ingredient = new Ingredient();
-            ingredient.setName(ingredientDTO.getName());
-            ingredient.setAmount(ingredientDTO.getAmount());
-            ingredient.setUnit(ingredientDTO.getUnit());
-            return ingredient;
-        }).collect(Collectors.toList()));
+        recipe.setIngredients(mapIngredients());
 
         return recipe;
+    }
+
+    private List<Ingredient> mapIngredients() {
+        return ingredients.stream().map(this::mapIngredient).collect(Collectors.toList());
+    }
+
+    private Ingredient mapIngredient(IngredientDTO ingredientDTO) {
+        Ingredient ingredient = new Ingredient();
+        ingredient.setName(ingredientDTO.getName());
+        ingredient.setAmount(ingredientDTO.getAmount());
+        ingredient.setUnit(ingredientDTO.getUnit());
+        return ingredient;
     }
 }

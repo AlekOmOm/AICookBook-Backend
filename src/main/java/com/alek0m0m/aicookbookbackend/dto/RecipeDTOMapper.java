@@ -7,6 +7,7 @@ import com.alek0m0m.aicookbookbackend.model.Recipe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +25,10 @@ public class RecipeDTOMapper implements EntityToDTOMapper<Recipe, RecipeDTO> {
     @Override
     public RecipeDTO apply(Recipe recipe) {
         return EntityToDTOMapper.super.apply(recipe);
+    }
+
+    public List<RecipeDTO> applyAll(List<Recipe> RecipeDTOs) {
+        return RecipeDTOs.stream().map(this::mapRecipeToDTO).toList();
     }
 
     // ------------------ Concrete mappings ------------------

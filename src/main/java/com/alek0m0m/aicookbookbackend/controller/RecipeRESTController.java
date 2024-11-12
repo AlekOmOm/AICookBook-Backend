@@ -24,20 +24,14 @@ public class RecipeRESTController extends BaseRESTController<Recipe, RecipeDTO, 
 
 
     @PostMapping
-    public ResponseEntity<RecipeDTO> create(@RequestBody RecipeDTO recipeDTOinput) {
-        System.out.println(recipeDTOinput);
-
-        try {
-            if (recipeDTOinput == null) {
-                throw new Exception("Invalid input");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    public ResponseEntity<RecipeDTO> create(@RequestBody RecipeDTO recipeDTO) {
+        if (recipeDTO == null) {
+            return ResponseEntity.badRequest().build();
         }
 
         // RecipeDTO recipeDTO = recipeDTOinput.toEntity();
 
-        return ResponseEntity.ok(this.getService().save(recipeDTOinput));
+        return ResponseEntity.ok(this.getService().save(recipeDTO));
     }
 
 }
