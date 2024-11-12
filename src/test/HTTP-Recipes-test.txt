@@ -15,7 +15,13 @@ POST http://localhost:8080/recipes
 
 {
   "name": "Pasta",
-  "description": "Pasta with tomato sauce",
+  "instructions": "Cook pasta, add tomato sauce",
+    "tags": "pasta, italian",
+    "servings": 2,
+    "prepTime": 5,
+    "cookTime": 10,
+    "totalTime": 15,
+
   "ingredients": [
     {
       "name": "Pasta",
