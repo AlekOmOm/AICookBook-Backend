@@ -27,7 +27,4 @@ public class RecipeRESTController extends BaseRESTController<Recipe, RecipeDTO, 
         return ResponseEntity.ok(this.getService().save(recipeDTO));
     }
 
-
-
-
 }
