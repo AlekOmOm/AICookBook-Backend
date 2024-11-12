@@ -7,7 +7,6 @@ Content-Type: application/json
   "password": "12"
 }
 
-
 ### Test of Recipe CRUD
 
 ### 1. create a recipe

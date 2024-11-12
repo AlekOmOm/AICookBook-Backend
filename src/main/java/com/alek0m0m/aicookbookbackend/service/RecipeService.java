@@ -25,7 +25,6 @@ public class RecipeService extends BaseService<Recipe, RecipeDTO, RecipeReposito
     private final IngredientDTOMapper ingredientDTOMapper;
     private final RecipeDTOMapper recipeDTOMapper;
 
-
     @Autowired
     protected RecipeService(RecipeRepository repository, RecipeDTOMapper recipeDTOMapper, IngredientService ingredientService, IngredientDTOMapper ingredientDTOMapper) {
         super(repository, recipeDTOMapper);
