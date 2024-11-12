@@ -1,6 +1,5 @@
 package com.alek0m0m.aicookbookbackend.library.jpa;
 
-
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;

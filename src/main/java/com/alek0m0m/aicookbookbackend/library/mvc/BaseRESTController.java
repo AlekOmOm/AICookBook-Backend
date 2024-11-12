@@ -23,16 +23,9 @@ public abstract class BaseRESTController<T extends BaseEntity, R extends BaseEnt
         return (BaseService<T, R, BaseRepository<T>>) baseService;
     }
 
-
     // ------------------- CRUD -------------------
 
 
-
-
-    @PostMapping
-    public ResponseEntity<R> create(@RequestBody R entityDTO) {
-        return ResponseEntity.ok(this.getService().save(entityDTO));
-    }
 
     @GetMapping
     public ResponseEntity<List<R>> getAll() {

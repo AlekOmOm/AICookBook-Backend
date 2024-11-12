@@ -1,6 +1,7 @@
 package com.alek0m0m.aicookbookbackend.controller;
 
 
+import com.alek0m0m.aicookbookbackend.dto.RecipeDTOInput;
 import com.alek0m0m.aicookbookbackend.library.jpa.*;
 import com.alek0m0m.aicookbookbackend.library.mvc.*;
 
@@ -21,10 +22,22 @@ public class RecipeRESTController extends BaseRESTController<Recipe, RecipeDTO, 
         super(service);
     }
 
-    @Override
+
     @PostMapping
-    public ResponseEntity<RecipeDTO> create(@RequestBody RecipeDTO recipeDTO) {
-        return ResponseEntity.ok(this.getService().save(recipeDTO));
+    public ResponseEntity<RecipeDTO> create(@RequestBody RecipeDTO recipeDTOinput) {
+        System.out.println(recipeDTOinput);
+
+        try {
+            if (recipeDTOinput == null) {
+                throw new Exception("Invalid input");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // RecipeDTO recipeDTO = recipeDTOinput.toEntity();
+
+        return ResponseEntity.ok(this.getService().save(recipeDTOinput));
     }
 
 }

@@ -54,9 +54,7 @@ public class RecipeService extends BaseService<Recipe, RecipeDTO, RecipeReposito
     public List<RecipeDTO> findAll() {
         return super.findAll().stream()
                 .map(recipeDTO -> {
-                    recipeDTO.setIngredients(recipeDTO.getIngredients().stream()
-                            .map(ingredientDTO -> ingredientService.findById(ingredientDTO.getId()).toEntity())
-                            .collect(Collectors.toList()));
+                    setIngredients(recipeDTO);
                     return recipeDTO;
                 })
                 .collect(Collectors.toList());
@@ -65,9 +63,7 @@ public class RecipeService extends BaseService<Recipe, RecipeDTO, RecipeReposito
     @Override
     public RecipeDTO findById(long id) {
         RecipeDTO recipeDTO = super.findById(id);
-        recipeDTO.setIngredients(recipeDTO.getIngredients().stream()
-                .map(ingredientDTO -> ingredientService.findById(ingredientDTO.getId()).toEntity())
-                .collect(Collectors.toList()));
+        setIngredients(recipeDTO);
         return recipeDTO;
     }
 
@@ -78,4 +74,12 @@ public class RecipeService extends BaseService<Recipe, RecipeDTO, RecipeReposito
         super.deleteById(id);
     }
 
+
+    // --------------------- Helper methods ---------------------
+
+    private void setIngredients(RecipeDTO recipeDTO) {
+        recipeDTO.setIngredients(recipeDTO.getIngredients().stream()
+                .map(ingredientDTO -> ingredientService.findById(ingredientDTO.getId()))
+                .collect(Collectors.toList()));
+    }
 }

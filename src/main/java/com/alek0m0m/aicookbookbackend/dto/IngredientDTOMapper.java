@@ -14,7 +14,6 @@ public class IngredientDTOMapper implements EntityToDTOMapper<Ingredient, Ingred
         return mapRecipeToDTO(ingredient);
     }
 
-
     @Override
     public IngredientDTO apply(Ingredient ingredient) {
         return EntityToDTOMapper.super.apply(ingredient);
