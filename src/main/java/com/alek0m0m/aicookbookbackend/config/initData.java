@@ -55,8 +55,8 @@ public class initData implements CommandLineRunner {
         recipe.setCookTime(10);
         recipe.setTotalTime(15);
 
-        Ingredient i1 = new Ingredient("Pasta", 200, "g");
-        Ingredient i2 = new Ingredient("Salt", 1, "tsp");
+        Ingredient i1 = new Ingredient("Cucumber", 200, "g");
+        Ingredient i2 = new Ingredient("Spinach", 1, "tsp");
 
 
         recipe.setIngredients(List.of(i1, i2));

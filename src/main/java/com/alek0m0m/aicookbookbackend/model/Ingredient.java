@@ -2,10 +2,7 @@ package com.alek0m0m.aicookbookbackend.model;
 
 import com.alek0m0m.aicookbookbackend.library.jpa.BaseEntity;
 import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 
 @Entity
@@ -13,6 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Ingredient extends BaseEntity{
 
     private String name;

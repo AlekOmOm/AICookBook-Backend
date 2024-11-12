@@ -40,16 +40,10 @@ public class RecipeService extends BaseService<Recipe, RecipeDTO, RecipeReposito
     public RecipeDTO save(BaseEntityDTO<Recipe> entityDTO) {
         Recipe recipe = entityDTO.toEntity();
 
-        List<IngredientDTO> ingredientDTOs = ingredientDTOMapper.applyAll(recipe.getIngredients());
-
-        // Set saved ingredients to the recipe
-        recipe.setIngredients(ingredientService.saveAllIngredients(recipe.getIngredients()));
-
         System.out.println("RecipeService.save: " + recipe);
 
-        RecipeDTO dto = new RecipeDTO();
         // Save recipe
-        return dto;
+        return super.save(recipeDTOMapper.apply(entityDTO.toEntity()));
     }
 
     @Override

@@ -4,10 +4,9 @@ import com.alek0m0m.aicookbookbackend.library.jpa.*;
 import com.alek0m0m.aicookbookbackend.library.mvc.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +16,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Recipe extends BaseEntity {
 
     private String name;
@@ -28,6 +28,7 @@ public class Recipe extends BaseEntity {
     private int totalTime;
 
     @OneToMany
+    @Cascade(CascadeType.ALL)
     private List<Ingredient> ingredients;
 
 }
