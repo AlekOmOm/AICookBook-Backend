@@ -3,7 +3,6 @@ package com.alek0m0m.aicookbookbackend.dto;
 
 import com.alek0m0m.aicookbookbackend.library.jpa.*;
 import com.alek0m0m.aicookbookbackend.model.Ingredient;
-import com.alek0m0m.aicookbookbackend.model.Recipe;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,6 +11,10 @@ public class IngredientDTOMapper implements EntityToDTOMapper<Ingredient, Ingred
     @Override
     public IngredientDTO map(Ingredient ingredient) {
         return mapRecipeToDTO(ingredient);
+    }
+    
+    public Ingredient map(IngredientDTO ingredientDTO) {
+        return mapDTOToRecipe(ingredientDTO);
     }
 
     @Override

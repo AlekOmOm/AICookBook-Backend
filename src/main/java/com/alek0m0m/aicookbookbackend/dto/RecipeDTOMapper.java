@@ -2,6 +2,7 @@ package com.alek0m0m.aicookbookbackend.dto;
 
 
 import com.alek0m0m.aicookbookbackend.library.jpa.*;
+import com.alek0m0m.aicookbookbackend.model.Ingredient;
 import com.alek0m0m.aicookbookbackend.model.Recipe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class RecipeDTOMapper implements EntityToDTOMapper<Recipe, RecipeDTO> {
     public RecipeDTO map(Recipe recipe) {
         return mapRecipeToDTO(recipe);
     }
+
 
     @Override
     public RecipeDTO apply(Recipe recipe) {
@@ -56,7 +58,7 @@ public class RecipeDTOMapper implements EntityToDTOMapper<Recipe, RecipeDTO> {
         recipe.setCookTime(recipeDTO.getCookTime());
         recipe.setTotalTime(recipeDTO.getTotalTime());
         recipe.setIngredients(recipeDTO.getIngredients()
-                .stream().map(ingredientDTO -> ingredientDTOMapper.apply(ingredientDTO))
+                .stream().map(ingredientDTO -> ingredientDTOMapper.map(ingredientDTO))
                 .collect(Collectors.toList())
         );
         return recipe;
