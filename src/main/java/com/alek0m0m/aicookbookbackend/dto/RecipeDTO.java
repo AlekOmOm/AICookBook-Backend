@@ -29,6 +29,32 @@ public class RecipeDTO extends BaseEntityDTO<Recipe> {
     private int cookTime;
     private int totalTime;
 
+    /*
+    POST /api/recipes
+    {
+  "name": "Pasta",
+  "instructions": "Cook pasta, add tomato sauce",
+    "tags": "pasta, italian",
+    "servings": 2,
+    "prepTime": 5,
+    "cookTime": 10,
+    "totalTime": 15,
+
+  "ingredients": [
+    {
+      "name": "Pasta",
+      "quantity": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Tomato sauce",
+      "quantity": 100,
+      "unit": "g"
+    }
+  ]
+}
+     */
+
     @OneToMany
     private List<Ingredient> ingredients;
 

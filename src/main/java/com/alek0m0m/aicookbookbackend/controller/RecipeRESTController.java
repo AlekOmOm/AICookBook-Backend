@@ -10,6 +10,7 @@ import com.alek0m0m.aicookbookbackend.repository.RecipeRepository;
 import com.alek0m0m.aicookbookbackend.service.RecipeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,10 +21,9 @@ public class RecipeRESTController extends BaseRESTController<Recipe, RecipeDTO, 
         super(service);
     }
 
-
     @Override
     @PostMapping
-    public ResponseEntity<RecipeDTO> create(RecipeDTO recipeDTO) {
+    public ResponseEntity<RecipeDTO> create(@RequestBody RecipeDTO recipeDTO) {
         return ResponseEntity.ok(this.getService().save(recipeDTO));
     }
 
