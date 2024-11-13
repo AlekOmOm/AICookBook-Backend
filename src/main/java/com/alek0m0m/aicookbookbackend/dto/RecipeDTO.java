@@ -1,19 +1,11 @@
 package com.alek0m0m.aicookbookbackend.dto;
 
-import com.alek0m0m.aicookbookbackend.dto.serialization.BaseEntityDTODeserializer;
 import com.alek0m0m.aicookbookbackend.library.jpa.*;
-import com.alek0m0m.aicookbookbackend.library.mvc.*;
 import com.alek0m0m.aicookbookbackend.model.Ingredient;
 import com.alek0m0m.aicookbookbackend.model.Recipe;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.OneToMany;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.Cascade;
+import lombok.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,9 +14,11 @@ import java.util.stream.Collectors;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonDeserialize(using = BaseEntityDTODeserializer.class)
+@ToString
+@JsonDeserialize(as = RecipeDTO.class)
 public class RecipeDTO extends BaseEntityDTO<Recipe> {
 
+    private long id;
     private String name;
     private String instructions;
     private String tags;
@@ -32,15 +26,14 @@ public class RecipeDTO extends BaseEntityDTO<Recipe> {
     private int prepTime;
     private int cookTime;
     private int totalTime;
-    @OneToMany
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+
     @JsonProperty("ingredients")
     private List<IngredientDTO> ingredients;
 
     @Override
     public Recipe toEntity() {
         Recipe recipe = new Recipe();
-        recipe.setId(getId());
+        recipe.setId(this.id);
         recipe.setName(getName());
         recipe.setInstructions(getInstructions());
         recipe.setTags(getTags());
@@ -48,12 +41,20 @@ public class RecipeDTO extends BaseEntityDTO<Recipe> {
         recipe.setPrepTime(getPrepTime());
         recipe.setCookTime(getCookTime());
         recipe.setTotalTime(getTotalTime());
-        recipe.setIngredients(mapIngredients());
+
+        if (getIngredients() != null) {
+            recipe.setIngredients(getIngredients().stream().map(IngredientDTO::toEntity).collect(Collectors.toList()));
+        } else {
+            recipe.setIngredients(null);
+            System.out.println("debug check for"+ recipe.getName());
+            System.out.println("RecipeDTO.toEntity: ingredients is null");
+        }
 
         return recipe;
     }
 
-    private List<Ingredient> mapIngredients() {
+    private List<Ingredient> mapIngredients(List<IngredientDTO> ingredients) {
+
         return ingredients.stream().map(this::mapIngredient).collect(Collectors.toList());
     }
 

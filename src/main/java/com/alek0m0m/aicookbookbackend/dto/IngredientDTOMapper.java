@@ -10,13 +10,21 @@ import java.util.List;
 @Service
 public class IngredientDTOMapper implements EntityToDTOMapper<Ingredient, IngredientDTO> {
 
+    // ------------------ Interface methods ------------------
     @Override
     public IngredientDTO map(Ingredient ingredient) {
-        return mapRecipeToDTO(ingredient);
+        return mapIngredientToDTO(ingredient);
+    }
+    public List<IngredientDTO> mapAll(List<Ingredient> ingredients) {
+        return ingredients.stream().map(this::mapIngredientToDTO).toList();
     }
 
     public Ingredient map(IngredientDTO ingredientDTO) {
-        return mapDTOToRecipe(ingredientDTO);
+        return mapDTOToIngredient(ingredientDTO);
+    }
+
+    public List<Ingredient> mapAllDTOs(List<IngredientDTO> ingredientDTOs) {
+        return ingredientDTOs.stream().map(this::mapDTOToIngredient).toList();
     }
 
     @Override
@@ -24,7 +32,8 @@ public class IngredientDTOMapper implements EntityToDTOMapper<Ingredient, Ingred
         return EntityToDTOMapper.super.apply(ingredient);
     }
 
-    private IngredientDTO mapRecipeToDTO(Ingredient ingredient) {
+    // ------------------ Concrete mappings ------------------
+    private IngredientDTO mapIngredientToDTO(Ingredient ingredient) {
         IngredientDTO ingredientDTO = new IngredientDTO();
         ingredientDTO.setId(ingredient.getId());
         ingredientDTO.setName(ingredient.getName());
@@ -33,7 +42,7 @@ public class IngredientDTOMapper implements EntityToDTOMapper<Ingredient, Ingred
         return ingredientDTO;
     }
 
-    private Ingredient mapDTOToRecipe(IngredientDTO ingredientDTO) {
+    private Ingredient mapDTOToIngredient(IngredientDTO ingredientDTO) {
         Ingredient ingredient = new Ingredient();
         ingredient.setId(ingredientDTO.getId());
         ingredient.setName(ingredientDTO.getName());
@@ -42,7 +51,4 @@ public class IngredientDTOMapper implements EntityToDTOMapper<Ingredient, Ingred
         return ingredient;
     }
 
-    public List<IngredientDTO> applyAll(List<Ingredient> ingredients) {
-        return ingredients.stream().map(this::mapRecipeToDTO).toList();
-    }
 }

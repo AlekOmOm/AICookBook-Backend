@@ -2,18 +2,21 @@ package com.alek0m0m.aicookbookbackend.library.mvc;
 
 import com.alek0m0m.aicookbookbackend.library.jpa.*;
 import com.alek0m0m.aicookbookbackend.library.mvc.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.function.Predicate;
 
 @RestController
-public abstract class BaseRESTController<T extends BaseEntity, R extends BaseEntityDTO<T>, ServiceClass extends BaseService<T, R, RepositoryClass>, RepositoryClass extends BaseRepository<T>> implements BaseRESTControllerInterface<T, R> {
+public abstract class BaseRESTController<T extends BaseEntity, dto, R extends BaseEntityDTO<T>, ServiceClass extends BaseService<T, R, RepositoryClass>, RepositoryClass extends BaseRepository<T>> implements BaseRESTControllerInterface<T, R> {
 
     private final BaseService<T, R, RepositoryClass> baseService;
     protected final ServiceClass service;
 
+    @Autowired
     protected BaseRESTController(ServiceClass service) {
         this.baseService = service;
         this.service = service;
@@ -23,8 +26,23 @@ public abstract class BaseRESTController<T extends BaseEntity, R extends BaseEnt
         return (BaseService<T, R, BaseRepository<T>>) baseService;
     }
 
+    protected abstract R convertToDTO(dto dtoInput);
+
     // ------------------- CRUD -------------------
 
+
+    @PostMapping
+    public ResponseEntity<R> create(@RequestBody dto dto) {
+        if (dto == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        R dtoConverted = convertToDTO(dto);
+
+        System.out.println("BaseRESTController.create: " + dto);
+
+        return ResponseEntity.ok(getService().save(convertToDTO(dto)));
+    }
 
 
     @GetMapping
@@ -56,7 +74,7 @@ public abstract class BaseRESTController<T extends BaseEntity, R extends BaseEnt
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<R> update(@PathVariable long id, @RequestBody R entityDTO) {
+    public ResponseEntity<R> update(@PathVariable long id, @RequestBody dto dto) {
         R existingEntity = getService().findById(id);
         existingEntity.setId(id);
         return ResponseEntity.ok(getService().save(existingEntity));
@@ -68,6 +86,13 @@ public abstract class BaseRESTController<T extends BaseEntity, R extends BaseEnt
             return ResponseEntity.notFound().build();
         }
         getService().deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // delete all
+    @DeleteMapping("/all")
+    public ResponseEntity<Void> deleteAll() {
+        getService().deleteAll();
         return ResponseEntity.noContent().build();
     }
 

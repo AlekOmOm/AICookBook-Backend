@@ -2,7 +2,6 @@ package com.alek0m0m.aicookbookbackend.dto;
 
 
 import com.alek0m0m.aicookbookbackend.library.jpa.*;
-import com.alek0m0m.aicookbookbackend.model.Ingredient;
 import com.alek0m0m.aicookbookbackend.model.Recipe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,28 +12,36 @@ import java.util.stream.Collectors;
 @Service
 public class RecipeDTOMapper implements EntityToDTOMapper<Recipe, RecipeDTO> {
 
+    private final IngredientDTOMapper ingredientDTOMapper;
     @Autowired
-    private IngredientDTOMapper ingredientDTOMapper;
+    public RecipeDTOMapper(IngredientDTOMapper ingredientDTOMapper) {
+        this.ingredientDTOMapper = ingredientDTOMapper;
+    }
 
+    // ------------------ Interface methods ------------------
     @Override
     public RecipeDTO map(Recipe recipe) {
         return mapRecipeToDTO(recipe);
     }
 
+    public List<RecipeDTO> mapAll(List<Recipe> RecipeDTOs) {
+        return RecipeDTOs.stream().map(this::mapRecipeToDTO).toList();
+    }
+
+
     @Override
-    public RecipeDTO apply(Recipe recipe) {
+    public RecipeDTO apply(Recipe recipe) { // apply purpose: to be able to use this mapper in a stream
         return EntityToDTOMapper.super.apply(recipe);
     }
 
-    public List<RecipeDTO> applyAll(List<Recipe> RecipeDTOs) {
-        return RecipeDTOs.stream().map(this::mapRecipeToDTO).toList();
-    }
 
     // ------------------ Concrete mappings ------------------
 
 
     public RecipeDTO mapRecipeToDTO(Recipe recipe) {
         RecipeDTO recipeDTO = new RecipeDTO();
+        System.out.println("mapRecipeToDTO: " + recipe.getId());
+        System.out.println(" on entity:"+ recipe);
         recipeDTO.setId(recipe.getId());
         recipeDTO.setName(recipe.getName());
         recipeDTO.setInstructions(recipe.getInstructions());
@@ -43,10 +50,17 @@ public class RecipeDTOMapper implements EntityToDTOMapper<Recipe, RecipeDTO> {
         recipeDTO.setPrepTime(recipe.getPrepTime());
         recipeDTO.setCookTime(recipe.getCookTime());
         recipeDTO.setTotalTime(recipe.getTotalTime());
-        recipeDTO.setIngredients(recipe.getIngredients()
-                .stream().map(ingredient -> ingredientDTOMapper.map(ingredient))
-                .collect(Collectors.toList())
-        );
+
+        if (recipe.getIngredients() != null) {
+            recipeDTO.setIngredients(recipe.getIngredients()
+                    .stream().map(ingredientDTOMapper::map)
+                    .collect(Collectors.toList())
+            );
+        } else {
+            recipeDTO.setIngredients(null);
+            System.out.println("debug check for"+ recipe.getName());
+            System.out.println("RecipeDTOMapper.mapRecipeToDTO: ingredients is null");
+        }
 
         return recipeDTO;
     }
@@ -61,10 +75,17 @@ public class RecipeDTOMapper implements EntityToDTOMapper<Recipe, RecipeDTO> {
         recipe.setPrepTime(recipeDTO.getPrepTime());
         recipe.setCookTime(recipeDTO.getCookTime());
         recipe.setTotalTime(recipeDTO.getTotalTime());
-        recipe.setIngredients(recipeDTO.getIngredients()
-                .stream().map(ingredientDTO -> ingredientDTOMapper.map(ingredientDTO))
-                .collect(Collectors.toList())
-        );
+
+        if (recipeDTO.getIngredients() != null) {
+            recipe.setIngredients(recipeDTO.getIngredients()
+                    .stream().map(ingredientDTO -> ingredientDTOMapper.map(ingredientDTO))
+                    .collect(Collectors.toList())
+            );
+        } else {
+            recipe.setIngredients(null);
+            System.out.println("debug check for"+ recipeDTO.getName());
+            System.out.println("RecipeDTOMapper.mapDTOToRecipe: ingredients is null");
+        }
         return recipe;
     }
 

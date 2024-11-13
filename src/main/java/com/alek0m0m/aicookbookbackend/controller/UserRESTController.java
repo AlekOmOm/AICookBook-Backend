@@ -1,5 +1,6 @@
 package com.alek0m0m.aicookbookbackend.controller;
 
+import com.alek0m0m.aicookbookbackend.dto.UserDTOInput;
 import com.alek0m0m.aicookbookbackend.library.mvc.*;
 
 import com.alek0m0m.aicookbookbackend.dto.UserDTO;
@@ -13,11 +14,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/users")
-public class UserRESTController extends BaseRESTController<User, UserDTO, UserService, UserRepository> {
+public class UserRESTController extends BaseRESTController<User, UserDTOInput, UserDTO, UserService, UserRepository> {
 
     @Autowired
     protected UserRESTController(UserService service) {
         super(service);
+    }
+
+    @Override
+    protected UserDTO convertToDTO(UserDTOInput dtoInput) {
+        return dtoInput.toDTO();
     }
 
 }

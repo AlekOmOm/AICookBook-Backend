@@ -6,11 +6,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
 
-@FunctionalInterface
-@Service
-public interface EntityToDTOMapper<T, R> extends Function<T, R> {
-    R map(T entity);
 
+@Service
+public interface EntityToDTOMapper<T extends BaseEntity, R extends BaseEntityDTO<T>> extends Function<T, R> {
+    R map(T entity);
 
 
     @Override

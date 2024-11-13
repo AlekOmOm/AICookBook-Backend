@@ -1,12 +1,9 @@
 package com.alek0m0m.aicookbookbackend.library.mvc;
 
 import com.alek0m0m.aicookbookbackend.library.jpa.*;
-import com.alek0m0m.aicookbookbackend.library.mvc.*;
 import jakarta.persistence.EntityNotFoundException;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,28 +14,39 @@ import java.util.stream.Collectors;
 @Service
 public abstract class BaseService<T extends BaseEntity, R extends BaseEntityDTO<T>, RepositoryClass extends BaseRepository<T>> implements BaseServiceInterface<T,R> {
 
-    private final RepositoryClass baseRepository;
+    private final RepositoryClass repository;
     private final EntityToDTOMapper<T, R> entityToDtoMapper;
+
 
     @Autowired
     protected BaseService(RepositoryClass repository, EntityToDTOMapper<T,R> entityToDtoMapper) {
-        this.baseRepository = repository;
-
+        this.repository = repository;
         this.entityToDtoMapper = entityToDtoMapper;
     }
 
     public BaseRepository<T> getRepository() {
-        return baseRepository;
+        return repository;
     }
 
     @Transactional
+    @Before("execution(* com.alek0m0m.aicookbookbackend.service.*.*(..))")
+    public void before() {
+        repository.resetAutoIncrement();
+    }
+
+    // --------------------- CRUD ---------------------
+    @Transactional
     public R save(BaseEntityDTO<T> entityDTO) {
         System.out.println("Saving entity: " + entityDTO);
+
+        T entity = entityDTO.toEntity();
+
+        System.out.println("Entity saved: " + entity);
+
         return entityToDtoMapper.apply(
                 getRepository()
-                        .save(entityDTO.toEntity()));
+                        .save(entity));
     }
-    // save all
 
     @Transactional
     public List<R> saveAll(List<BaseEntityDTO<T>> entityDTOs) {
@@ -50,7 +58,6 @@ public abstract class BaseService<T extends BaseEntity, R extends BaseEntityDTO<
                 .map(entityToDtoMapper)
                 .collect(Collectors.toList());
     }
-
 
     @Transactional
     public R update(BaseEntityDTO<T> entityDTO) {
@@ -67,14 +74,14 @@ public abstract class BaseService<T extends BaseEntity, R extends BaseEntityDTO<
     }
 
     public List<R> findAll(Predicate<R> filter) {
-        return baseRepository.findAll().stream()
+        return repository.findAll().stream()
                 .map(entityToDtoMapper)
                 .filter(filter)
                 .collect(Collectors.toList());
     }
 
     public List<R> findAllAndConvertToDTO() {
-        return baseRepository.findAll().stream()
+        return repository.findAll().stream()
                 .map(entityToDtoMapper)
                 .collect(Collectors.toList());
     }
@@ -91,6 +98,10 @@ public abstract class BaseService<T extends BaseEntity, R extends BaseEntityDTO<
     public void deleteById(long id) {
         getRepository().deleteById(id);
     }
+
+
+    // delete all
+    public void deleteAll() { getRepository().deleteAll(); }
 
 
 }

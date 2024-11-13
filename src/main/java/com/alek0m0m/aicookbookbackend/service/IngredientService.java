@@ -21,7 +21,6 @@ public class IngredientService extends BaseService<Ingredient, IngredientDTO, In
         this.ingredientDTOMapper = ingredientDTOMapper;
     }
 
-
     public IngredientDTO save(IngredientDTO ingredientDTO) {
         return super.save(ingredientDTO);
     }

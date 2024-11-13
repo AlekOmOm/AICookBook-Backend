@@ -23,36 +23,19 @@ import java.util.stream.Collectors;
 public class RecipeService extends BaseService<Recipe, RecipeDTO, RecipeRepository> {
 
     private final IngredientService ingredientService;
-    private final IngredientDTOMapper ingredientDTOMapper;
-    private final RecipeDTOMapper recipeDTOMapper;
 
     @Autowired
-    protected RecipeService(RecipeRepository repository, RecipeDTOMapper recipeDTOMapper, IngredientService ingredientService, IngredientDTOMapper ingredientDTOMapper) {
+    protected RecipeService(RecipeRepository repository, RecipeDTOMapper recipeDTOMapper, IngredientService ingredientService) {
         super(repository, recipeDTOMapper);
         this.ingredientService = ingredientService;
-        this.ingredientDTOMapper = ingredientDTOMapper;
-        this.recipeDTOMapper = recipeDTOMapper;
     }
 
     // --------------------- CRUD ---------------------
-    @Override
-    @Transactional
-    public RecipeDTO save(BaseEntityDTO<Recipe> entityDTO) {
-        Recipe recipe = entityDTO.toEntity();
-
-        System.out.println("RecipeService.save: " + recipe);
-
-        // Save recipe
-        return super.save(recipeDTOMapper.apply(entityDTO.toEntity()));
-    }
 
     @Override
     public List<RecipeDTO> findAll() {
         return super.findAll().stream()
-                .map(recipeDTO -> {
-                    setIngredients(recipeDTO);
-                    return recipeDTO;
-                })
+                .peek(this::setIngredients)
                 .collect(Collectors.toList());
     }
 
@@ -66,7 +49,8 @@ public class RecipeService extends BaseService<Recipe, RecipeDTO, RecipeReposito
     @Override
     public void deleteById(long id) {
         RecipeDTO recipeDTO = findById(id);
-        recipeDTO.getIngredients().forEach(ingredient -> ingredientService.deleteById(ingredient.getId()));
+        recipeDTO.getIngredients().forEach(ingredient
+                -> ingredientService.deleteById(ingredient.getId()));
         super.deleteById(id);
     }
 
@@ -78,4 +62,5 @@ public class RecipeService extends BaseService<Recipe, RecipeDTO, RecipeReposito
                 .map(ingredientDTO -> ingredientService.findById(ingredientDTO.getId()))
                 .collect(Collectors.toList()));
     }
+
 }

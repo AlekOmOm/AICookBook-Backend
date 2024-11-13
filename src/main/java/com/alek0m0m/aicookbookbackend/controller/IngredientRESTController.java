@@ -1,6 +1,7 @@
 package com.alek0m0m.aicookbookbackend.controller;
 
 import com.alek0m0m.aicookbookbackend.dto.IngredientDTO;
+import com.alek0m0m.aicookbookbackend.dto.IngredientDTOInput;
 import com.alek0m0m.aicookbookbackend.library.mvc.*;
 import com.alek0m0m.aicookbookbackend.library.jpa.*;
 import com.alek0m0m.aicookbookbackend.model.Ingredient;
@@ -12,10 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/ingredients")
-public class IngredientRESTController extends BaseRESTController<Ingredient, IngredientDTO, IngredientService, IngredientRepository> {
+public class IngredientRESTController extends BaseRESTController<Ingredient, IngredientDTOInput, IngredientDTO, IngredientService, IngredientRepository> {
 
     protected IngredientRESTController(IngredientService service) {
         super(service);
+    }
+
+    @Override
+    protected IngredientDTO convertToDTO(IngredientDTOInput dtoInput) {
+        return null;
     }
 
 }

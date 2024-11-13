@@ -25,8 +25,8 @@ public interface BaseRESTControllerInterface<T extends BaseEntity,R extends Base
     @GetMapping("/{id}")
     public ResponseEntity<R> getById(long id);
 
-    @PutMapping("/{id}")
-    public ResponseEntity<R> update(long id, R entityDTO);
+//    @PutMapping("/{id}")
+//    public ResponseEntity<R> update(long id, R entityDTO);
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(long id);

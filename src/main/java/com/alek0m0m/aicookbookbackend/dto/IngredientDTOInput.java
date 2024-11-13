@@ -11,8 +11,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@JsonDeserialize(as = IngredientDTO.class)
-public class IngredientDTO extends BaseEntityDTO<Ingredient> {
+@JsonDeserialize(as = IngredientDTOInput.class)
+public class IngredientDTOInput {
 
     @JsonProperty("id")
     private long id;
@@ -26,13 +26,12 @@ public class IngredientDTO extends BaseEntityDTO<Ingredient> {
     @JsonProperty("unit")
     private String unit;
 
-    @Override
-    public Ingredient toEntity() {
-        Ingredient ingredient = new Ingredient();
-        ingredient.setId(getId());
-        ingredient.setName(getName());
-        ingredient.setAmount(getAmount());
-        ingredient.setUnit(getUnit());
-        return ingredient;
+    public IngredientDTO toDTO() {
+        IngredientDTO ingredientDTO = new IngredientDTO();
+        ingredientDTO.setId(getId());
+        ingredientDTO.setName(getName());
+        ingredientDTO.setAmount(getAmount());
+        ingredientDTO.setUnit(getUnit());
+        return ingredientDTO;
     }
 }

@@ -17,21 +17,34 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/recipes")
-public class RecipeRESTController extends BaseRESTController<Recipe, RecipeDTO, RecipeService, RecipeRepository> {
+public class RecipeRESTController extends BaseRESTController<Recipe, RecipeDTOInput, RecipeDTO, RecipeService, RecipeRepository> {
     public RecipeRESTController( RecipeService service) {
         super(service);
     }
 
+    @Override
+    protected RecipeDTO convertToDTO(RecipeDTOInput recipeDTOInput) {
 
-    @PostMapping
-    public ResponseEntity<RecipeDTO> create(@RequestBody RecipeDTO recipeDTO) {
-        if (recipeDTO == null) {
-            return ResponseEntity.badRequest().build();
-        }
+        System.out.println("RecipeDTOInput id check: " + recipeDTOInput.getId());
 
-        // RecipeDTO recipeDTO = recipeDTOinput.toEntity();
+        RecipeDTO dto = recipeDTOInput.toDTO();
 
-        return ResponseEntity.ok(this.getService().save(recipeDTO));
+        System.out.println("RecipeDTO id check: " + dto.getId());
+
+        return dto;
     }
+
+
+//    @PostMapping
+//    public ResponseEntity<RecipeDTO> create(@RequestBody RecipeDTO recipeDTO) {
+//        if (recipeDTO == null) {
+//            return ResponseEntity.badRequest().build();
+//        }
+//
+//        System.out.println("RecipeRESTController.create: " + recipeDTO);
+//        System.out.println("ingredients in recipeDTO: " + recipeDTO.getIngredients());
+//
+//        return ResponseEntity.ok(this.getService().save(recipeDTO));
+//    }
 
 }
