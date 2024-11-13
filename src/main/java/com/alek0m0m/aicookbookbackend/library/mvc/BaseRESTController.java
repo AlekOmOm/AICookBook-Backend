@@ -96,4 +96,11 @@ public abstract class BaseRESTController<T extends BaseEntity, dto, R extends Ba
         return ResponseEntity.noContent().build();
     }
 
+    // ------------------- Helper methods -------------------
+
+    @PostMapping("/reset-auto-increment")
+    public ResponseEntity<Void> resetAutoIncrement() {
+        getService().resetAutoIncrement();
+        return ResponseEntity.noContent().build();
+    }
 }
