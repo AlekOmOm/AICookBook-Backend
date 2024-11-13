@@ -1,0 +1,25 @@
+name: Your Workflow
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+
+      - name: Commit changes
+        run: |
+          # Your commands to make changes and commit
+          git add .
+          git commit -m "Your commit message"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
