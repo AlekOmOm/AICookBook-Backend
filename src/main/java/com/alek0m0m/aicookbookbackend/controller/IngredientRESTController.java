@@ -21,5 +21,4 @@ public class IngredientRESTController extends BaseRESTController<IngredientDTOIn
     protected IngredientRESTController(IngredientService service) {
         super(service);
     }
-
 }
