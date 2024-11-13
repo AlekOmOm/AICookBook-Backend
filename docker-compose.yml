@@ -14,27 +14,38 @@ services:
       - SPRING_DATASOURCE_PASSWORD=${ENV_DB_PASSWORD}
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
+    env_file:
+      - .env
     depends_on:
       database:
         condition: service_healthy
+    networks:
+        - aicookbook-network
 
   database:
     image: mysql:8.0
+    ports:
+      - "3306:3306"
+
     environment:
       MYSQL_DATABASE: ${ENV_DB_SCHEMA_NAME}
       MYSQL_USER: ${DOCKER_DB_USERNAME}
       MYSQL_PASSWORD: ${DOCKER_DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DOCKER_DB_ROOT_PASSWORD}
-    ports:
-      - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
-      - ./src/main/resources/db/migration:/docker-entrypoint-initdb.d
+      - ./src/main/resources/migration/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h localhost"]
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+        - aicookbook-network
 
 volumes:
   db_data:
+
+networks:
+    aicookbook-network:
+        driver: bridge
