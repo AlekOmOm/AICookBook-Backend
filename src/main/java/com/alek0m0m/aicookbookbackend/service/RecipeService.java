@@ -1,12 +1,9 @@
 package com.alek0m0m.aicookbookbackend.service;
 
-import com.alek0m0m.aicookbookbackend.dto.IngredientDTO;
-import com.alek0m0m.aicookbookbackend.dto.IngredientDTOMapper;
-import com.alek0m0m.aicookbookbackend.dto.RecipeDTOMapper;
+import com.alek0m0m.aicookbookbackend.dto.*;
 import com.alek0m0m.aicookbookbackend.library.jpa.*;
 import com.alek0m0m.aicookbookbackend.library.mvc.*;
 
-import com.alek0m0m.aicookbookbackend.dto.RecipeDTO;
 import com.alek0m0m.aicookbookbackend.model.Ingredient;
 import com.alek0m0m.aicookbookbackend.model.Recipe;
 import com.alek0m0m.aicookbookbackend.repository.RecipeRepository;
@@ -14,20 +11,27 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
-public class RecipeService extends BaseService<Recipe, RecipeDTO, RecipeRepository> {
+public class RecipeService extends BaseService<RecipeDTOInput, RecipeDTO, Recipe, RecipeDTOMapper, RecipeRepository> {
 
     private final IngredientService ingredientService;
+    private final RecipeRepository recipeRepository;
 
     @Autowired
-    protected RecipeService(RecipeRepository repository, RecipeDTOMapper recipeDTOMapper, IngredientService ingredientService) {
+    protected RecipeService(RecipeRepository repository, RecipeDTOMapper recipeDTOMapper, IngredientService ingredientService, RecipeRepository recipeRepository) {
         super(repository, recipeDTOMapper);
         this.ingredientService = ingredientService;
+        this.recipeRepository = recipeRepository;
+    }
+
+    @Override
+    protected void resetAutoIncrement() {
+        ingredientService.getRepository().resetAutoIncrement();
+        recipeRepository.resetAutoIncrement();
     }
 
     // --------------------- CRUD ---------------------
@@ -46,13 +50,13 @@ public class RecipeService extends BaseService<Recipe, RecipeDTO, RecipeReposito
         return recipeDTO;
     }
 
-    @Override
-    public void deleteById(long id) {
-        RecipeDTO recipeDTO = findById(id);
-        recipeDTO.getIngredients().forEach(ingredient
-                -> ingredientService.deleteById(ingredient.getId()));
-        super.deleteById(id);
-    }
+//    @Override
+//    public void deleteById(long id) {
+//        RecipeDTO recipeDTO = findById(id);
+//        recipeDTO.getIngredients().forEach(ingredient
+//                -> ingredientService.deleteById(ingredient.getId()));
+//        super.deleteById(id);
+//    }
 
 
     // --------------------- Helper methods ---------------------

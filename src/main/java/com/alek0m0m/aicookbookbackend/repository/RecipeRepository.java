@@ -13,8 +13,4 @@ public interface RecipeRepository extends BaseRepository<Recipe> {
 
 
 
-    @Modifying
-    @Transactional
-    @Query(value = "ALTER TABLE recipe AUTO_INCREMENT = 1", nativeQuery = true)
-    void resetAutoIncrement();
 }

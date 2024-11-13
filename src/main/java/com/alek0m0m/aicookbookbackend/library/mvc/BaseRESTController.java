@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.function.Predicate;
 
 @RestController
-public abstract class BaseRESTController<T extends BaseEntity, dto, R extends BaseEntityDTO<T>, ServiceClass extends BaseService<T, R, RepositoryClass>, RepositoryClass extends BaseRepository<T>> implements BaseRESTControllerInterface<T, R> {
+public abstract class BaseRESTController<dto, R extends BaseEntityDTO<T>, T extends BaseEntity, DtoMapper extends EntityToDTOMapper<dto, R, T>, ServiceClass extends BaseService<dto, R,T, DtoMapper, RepositoryClass>, RepositoryClass extends BaseRepository<T>> implements BaseRESTControllerInterface<dto, R, T, DtoMapper> {
 
-    private final BaseService<T, R, RepositoryClass> baseService;
+    private final BaseService<dto,R, T, DtoMapper, RepositoryClass> baseService;
     protected final ServiceClass service;
 
     @Autowired
@@ -22,14 +22,15 @@ public abstract class BaseRESTController<T extends BaseEntity, dto, R extends Ba
         this.service = service;
     }
 
-    public BaseService<T, R, BaseRepository<T>> getService() {
-        return (BaseService<T, R, BaseRepository<T>>) baseService;
+    public BaseService <dto,R, T, DtoMapper, BaseRepository<T>> getService() {
+        return (BaseService<dto, R, T, DtoMapper, BaseRepository<T>>) baseService;
     }
 
-    protected abstract R convertToDTO(dto dtoInput);
+    private R convertToDTO(dto dtoInput) {
+        return service.getDtoMapper().map(dtoInput);
+    }
 
     // ------------------- CRUD -------------------
-
 
     @PostMapping
     public ResponseEntity<R> create(@RequestBody dto dto) {
@@ -44,7 +45,6 @@ public abstract class BaseRESTController<T extends BaseEntity, dto, R extends Ba
         return ResponseEntity.ok(getService().save(convertToDTO(dto)));
     }
 
-
     @GetMapping
     public ResponseEntity<List<R>> getAll() {
         return ResponseEntity.ok(getService().findAll());
@@ -56,17 +56,16 @@ public abstract class BaseRESTController<T extends BaseEntity, dto, R extends Ba
         return getAllEntities(BaseEntity::condition);
     }
      */
-    public ResponseEntity<List<R>> getAllFiltered(Predicate<R> filter) { // Predicate parameter
-
-        return ResponseEntity.ok(getService().findAll(filter));
-    }
-
-    /* example:
+      /* example:
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> getAllActiveUsers() {
         // Filter only active users and transform into UserDTO
         return getAllAndConvert(user -> user.isActive() ? new UserDTO(user) : null);
     } */
+
+    public ResponseEntity<List<R>> getAllFiltered(Predicate<R> filter) {
+        return ResponseEntity.ok(getService().findAll(filter));
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<R> getById(@PathVariable long id) {

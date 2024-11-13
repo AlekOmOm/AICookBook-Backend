@@ -16,4 +16,8 @@ public interface BaseRepository<T extends BaseEntity> extends JpaRepository<T, L
     @Transactional
     @Query(value = "ALTER TABLE #{#entityName} AUTO_INCREMENT = 1", nativeQuery = true)
     void resetAutoIncrement();
+
+
+
+
 }

@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-public interface BaseRESTControllerInterface<T extends BaseEntity,R extends BaseEntityDTO<T>> {
-    BaseService<T, R, BaseRepository<T>> getService();
+public interface BaseRESTControllerInterface<dtoinput, R extends BaseEntityDTO<T>, T extends BaseEntity, DtoMapper extends EntityToDTOMapper<dtoinput, R, T>> {
+    BaseService<dtoinput,R,T, DtoMapper,BaseRepository<T>> getService();
 
     // ------------------- CRUD -------------------
 

@@ -2,7 +2,6 @@ package com.alek0m0m.aicookbookbackend.library.mvc;
 
 import com.alek0m0m.aicookbookbackend.library.jpa.*;
 import jakarta.persistence.EntityNotFoundException;
-import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,25 +11,25 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
-public abstract class BaseService<T extends BaseEntity, R extends BaseEntityDTO<T>, RepositoryClass extends BaseRepository<T>> implements BaseServiceInterface<T,R> {
+public abstract class BaseService<dtoinput, R extends BaseEntityDTO<T>, T extends BaseEntity, DtoMapper extends EntityToDTOMapper<dtoinput, R, T>, RepositoryClass extends BaseRepository<T>> implements BaseServiceInterface<R,T> {
 
     private final RepositoryClass repository;
-    private final EntityToDTOMapper<T, R> entityToDtoMapper;
-
+    private final DtoMapper mapper;
 
     @Autowired
-    protected BaseService(RepositoryClass repository, EntityToDTOMapper<T,R> entityToDtoMapper) {
+    protected BaseService(RepositoryClass repository, DtoMapper mapper) {
         this.repository = repository;
-        this.entityToDtoMapper = entityToDtoMapper;
+        this.mapper = mapper;
     }
 
     public BaseRepository<T> getRepository() {
         return repository;
     }
+    public EntityToDTOMapper<dtoinput, R, T> getDtoMapper() {
+        return mapper;
+    }
 
-    @Transactional
-    @Before("execution(* com.alek0m0m.aicookbookbackend.service.*.*(..))")
-    public void before() {
+    protected void resetAutoIncrement() {
         repository.resetAutoIncrement();
     }
 
@@ -41,9 +40,11 @@ public abstract class BaseService<T extends BaseEntity, R extends BaseEntityDTO<
 
         T entity = entityDTO.toEntity();
 
+        resetAutoIncrement();
+
         System.out.println("Entity saved: " + entity);
 
-        return entityToDtoMapper.apply(
+        return mapper.apply(
                 getRepository()
                         .save(entity));
     }
@@ -55,13 +56,13 @@ public abstract class BaseService<T extends BaseEntity, R extends BaseEntityDTO<
                         .map(BaseEntityDTO::toEntity)
                         .collect(Collectors.toList()))
                 .stream()
-                .map(entityToDtoMapper)
+                .map(mapper)
                 .collect(Collectors.toList());
     }
 
     @Transactional
     public R update(BaseEntityDTO<T> entityDTO) {
-        return entityToDtoMapper.apply(
+        return mapper.apply(
                 getRepository()
                         .save(entityDTO.toEntity()));
     }
@@ -69,27 +70,27 @@ public abstract class BaseService<T extends BaseEntity, R extends BaseEntityDTO<
     @Override
     public List<R> findAll() {
         return getRepository().findAll().stream()
-                .map(entityToDtoMapper)
+                .map(mapper)
                 .collect(Collectors.toList());
     }
 
     public List<R> findAll(Predicate<R> filter) {
         return repository.findAll().stream()
-                .map(entityToDtoMapper)
+                .map(mapper)
                 .filter(filter)
                 .collect(Collectors.toList());
     }
 
     public List<R> findAllAndConvertToDTO() {
         return repository.findAll().stream()
-                .map(entityToDtoMapper)
+                .map(mapper)
                 .collect(Collectors.toList());
     }
 
     @Override
     public R findById(long id) {
         return getRepository().findById(id)
-                .map(entityToDtoMapper)
+                .map(mapper)
                 .orElseThrow(() -> new EntityNotFoundException("Entity not found"));
     }
 
@@ -101,7 +102,10 @@ public abstract class BaseService<T extends BaseEntity, R extends BaseEntityDTO<
 
 
     // delete all
-    public void deleteAll() { getRepository().deleteAll(); }
+    public void deleteAll() {
+        getRepository().deleteAll();
+        resetAutoIncrement();
+    }
 
 
 }

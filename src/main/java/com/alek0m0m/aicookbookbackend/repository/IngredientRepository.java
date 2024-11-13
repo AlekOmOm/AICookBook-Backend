@@ -9,4 +9,5 @@ import org.springframework.transaction.annotation.Transactional;
 public interface IngredientRepository extends BaseRepository<Ingredient> {
     // Additional query methods if needed
 
+
 }

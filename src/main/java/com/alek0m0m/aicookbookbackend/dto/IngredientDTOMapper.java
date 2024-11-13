@@ -8,13 +8,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class IngredientDTOMapper implements EntityToDTOMapper<Ingredient, IngredientDTO> {
+public class IngredientDTOMapper implements EntityToDTOMapper<IngredientDTOInput, IngredientDTO, Ingredient> {
 
     // ------------------ Interface methods ------------------
     @Override
     public IngredientDTO map(Ingredient ingredient) {
         return mapIngredientToDTO(ingredient);
     }
+
     public List<IngredientDTO> mapAll(List<Ingredient> ingredients) {
         return ingredients.stream().map(this::mapIngredientToDTO).toList();
     }
@@ -26,6 +27,11 @@ public class IngredientDTOMapper implements EntityToDTOMapper<Ingredient, Ingred
     public List<Ingredient> mapAllDTOs(List<IngredientDTO> ingredientDTOs) {
         return ingredientDTOs.stream().map(this::mapDTOToIngredient).toList();
     }
+
+    public IngredientDTO map(IngredientDTOInput dtoInput) {
+        return dtoInput.toDTO();
+    }
+
 
     @Override
     public IngredientDTO apply(Ingredient ingredient) {

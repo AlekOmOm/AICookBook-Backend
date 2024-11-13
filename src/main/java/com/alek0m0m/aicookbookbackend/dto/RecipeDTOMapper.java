@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class RecipeDTOMapper implements EntityToDTOMapper<Recipe, RecipeDTO> {
+public class RecipeDTOMapper implements EntityToDTOMapper<RecipeDTOInput, RecipeDTO, Recipe> {
 
     private final IngredientDTOMapper ingredientDTOMapper;
     @Autowired
@@ -19,20 +19,28 @@ public class RecipeDTOMapper implements EntityToDTOMapper<Recipe, RecipeDTO> {
     }
 
     // ------------------ Interface methods ------------------
+
+    @Override
+    public RecipeDTO map(RecipeDTOInput recipeDTOInput) {
+        return recipeDTOInput.toDTO();
+    }
+
     @Override
     public RecipeDTO map(Recipe recipe) {
         return mapRecipeToDTO(recipe);
     }
+
+    @Override
+    public Recipe map(RecipeDTO dto) {
+        return dto.toEntity();
+    }
+
 
     public List<RecipeDTO> mapAll(List<Recipe> RecipeDTOs) {
         return RecipeDTOs.stream().map(this::mapRecipeToDTO).toList();
     }
 
 
-    @Override
-    public RecipeDTO apply(Recipe recipe) { // apply purpose: to be able to use this mapper in a stream
-        return EntityToDTOMapper.super.apply(recipe);
-    }
 
 
     // ------------------ Concrete mappings ------------------

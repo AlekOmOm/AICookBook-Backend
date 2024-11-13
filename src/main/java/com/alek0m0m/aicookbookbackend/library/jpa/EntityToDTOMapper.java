@@ -8,14 +8,16 @@ import java.util.function.Function;
 
 
 @Service
-public interface EntityToDTOMapper<T extends BaseEntity, R extends BaseEntityDTO<T>> extends Function<T, R> {
-    R map(T entity);
+public interface EntityToDTOMapper<dtoinput, R extends BaseEntityDTO<T>, T extends BaseEntity> extends Function<T, R> {
+    R map(dtoinput dtoinput);
 
+    T map(R dto);
+
+    R map(T entity);
 
     @Override
     default R apply(T t) {
         return map(t);
     }
-
 
 }

@@ -25,7 +25,7 @@ services:
   database:
     image: mysql:8.0
     ports:
-      - "3306:3306"
+      - "3307:3306"
 
     environment:
       MYSQL_DATABASE: ${ENV_DB_SCHEMA_NAME}
