@@ -48,8 +48,6 @@ public class RecipeDTOMapper implements EntityToDTOMapper<RecipeDTOInput, Recipe
 
     public RecipeDTO mapRecipeToDTO(Recipe recipe) {
         RecipeDTO recipeDTO = new RecipeDTO();
-        System.out.println("mapRecipeToDTO: " + recipe.getId());
-        System.out.println(" on entity:"+ recipe);
         recipeDTO.setId(recipe.getId());
         recipeDTO.setName(recipe.getName());
         recipeDTO.setInstructions(recipe.getInstructions());

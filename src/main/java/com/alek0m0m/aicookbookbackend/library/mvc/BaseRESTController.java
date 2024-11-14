@@ -47,6 +47,8 @@ public abstract class BaseRESTController<dto, R extends BaseEntityDTO<T>, T exte
 
     @GetMapping
     public ResponseEntity<List<R>> getAll() {
+        System.out.println("BaseRESTController.getAll");
+
         return ResponseEntity.ok(getService().findAll());
     }
 

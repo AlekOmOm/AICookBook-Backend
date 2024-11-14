@@ -6,8 +6,10 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
+import java.util.List;
+
 public interface IngredientRepository extends BaseRepository<Ingredient> {
     // Additional query methods if needed
-
 
 }

@@ -9,9 +9,9 @@ import com.alek0m0m.aicookbookbackend.model.Ingredient;
 import com.alek0m0m.aicookbookbackend.repository.IngredientRepository;
 import com.alek0m0m.aicookbookbackend.service.IngredientService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.Mapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/ingredients")
@@ -21,4 +21,5 @@ public class IngredientRESTController extends BaseRESTController<IngredientDTOIn
     protected IngredientRESTController(IngredientService service) {
         super(service);
     }
+
 }

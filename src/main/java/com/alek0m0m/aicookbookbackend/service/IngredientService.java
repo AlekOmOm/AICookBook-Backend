@@ -8,12 +8,17 @@ import com.alek0m0m.aicookbookbackend.repository.IngredientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class IngredientService extends BaseService<IngredientDTOInput, IngredientDTO, Ingredient, IngredientDTOMapper, IngredientRepository> {
 
+    private final IngredientRepository ingredientRepository;
+
     @Autowired
-    protected IngredientService(IngredientRepository repository, IngredientDTOMapper ingredientDTOMapper) {
+    protected IngredientService(IngredientRepository repository, IngredientDTOMapper ingredientDTOMapper, IngredientRepository ingredientRepository) {
         super(repository, ingredientDTOMapper);
+        this.ingredientRepository = ingredientRepository;
     }
 
 }

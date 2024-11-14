@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 @Repository
 public interface BaseRepository<T extends BaseEntity> extends JpaRepository<T, Long> {
 
@@ -16,8 +19,5 @@ public interface BaseRepository<T extends BaseEntity> extends JpaRepository<T, L
     @Transactional
     @Query(value = "ALTER TABLE #{#entityName} AUTO_INCREMENT = 1", nativeQuery = true)
     void resetAutoIncrement();
-
-
-
 
 }
