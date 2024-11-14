@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/recipes")
 public class RecipeRESTController extends BaseRESTController<RecipeDTOInput, RecipeDTO, Recipe, RecipeDTOMapper, RecipeService, RecipeRepository> {
 

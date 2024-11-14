@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 @RestController
+@CrossOrigin(origins = "*")
 public abstract class BaseRESTController<dto, R extends BaseEntityDTO<T>, T extends BaseEntity, DtoMapper extends EntityToDTOMapper<dto, R, T>, ServiceClass extends BaseService<dto, R,T, DtoMapper, RepositoryClass>, RepositoryClass extends BaseRepository<T>> implements BaseRESTControllerInterface<dto, R, T, DtoMapper> {
 
     private final BaseService<dto,R, T, DtoMapper, RepositoryClass> baseService;
