@@ -1,10 +1,8 @@
 package com.alek0m0m.aicookbookbackend.library.mvc;
 
 import com.alek0m0m.aicookbookbackend.library.jpa.*;
-import com.alek0m0m.aicookbookbackend.library.mvc.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -12,9 +10,9 @@ import java.util.function.Predicate;
 
 @RestController
 @CrossOrigin(origins = "*")
-public abstract class BaseRESTController<dto, R extends BaseEntityDTO<T>, T extends BaseEntity, DtoMapper extends EntityToDTOMapper<dto, R, T>, ServiceClass extends BaseService<dto, R,T, DtoMapper, RepositoryClass>, RepositoryClass extends BaseRepository<T>> implements BaseRESTControllerInterface<dto, R, T, DtoMapper> {
+public abstract class BaseRESTController<DTOInput, DTO extends BaseEntityDTO<Entity>, Entity extends BaseEntity, Mapper extends EntityToDTOMapperImpl<DTOInput, DTO, Entity>, ServiceClass extends BaseService<DTOInput, DTO, Entity, Mapper, RepositoryClass>, RepositoryClass extends BaseRepository<Entity>> implements BaseRESTControllerInterface<DTOInput, DTO, Entity, Mapper> {
 
-    private final BaseService<dto,R, T, DtoMapper, RepositoryClass> baseService;
+    private final BaseService<DTOInput, DTO, Entity, Mapper, RepositoryClass> baseService;
     protected final ServiceClass service;
 
     @Autowired
@@ -23,33 +21,26 @@ public abstract class BaseRESTController<dto, R extends BaseEntityDTO<T>, T exte
         this.service = service;
     }
 
-    public BaseService <dto,R, T, DtoMapper, BaseRepository<T>> getService() {
-        return (BaseService<dto, R, T, DtoMapper, BaseRepository<T>>) baseService;
+    public BaseService <DTOInput, DTO, Entity, Mapper, BaseRepository<Entity>> getService() {
+        return (BaseService<DTOInput, DTO, Entity, Mapper, BaseRepository<Entity>>) baseService;
     }
 
-    private R convertToDTO(dto dtoInput) {
+    private DTO map(DTOInput dtoInput) {
         return service.getDtoMapper().map(dtoInput);
     }
 
     // ------------------- CRUD -------------------
 
     @PostMapping
-    public ResponseEntity<R> create(@RequestBody dto dto) {
-        if (dto == null) {
+    public ResponseEntity<DTO> create(@RequestBody DTOInput dtoinput) {
+        if (dtoinput == null) {
             return ResponseEntity.badRequest().build();
         }
-
-        R dtoConverted = convertToDTO(dto);
-
-        System.out.println("BaseRESTController.create: " + dto);
-
-        return ResponseEntity.ok(getService().save(convertToDTO(dto)));
+        return ResponseEntity.ok(getService().save(map(dtoinput)));
     }
 
     @GetMapping
-    public ResponseEntity<List<R>> getAll() {
-        System.out.println("BaseRESTController.getAll");
-
+    public ResponseEntity<List<DTO>> getAll() {
         return ResponseEntity.ok(getService().findAll());
     }
 
@@ -66,18 +57,18 @@ public abstract class BaseRESTController<dto, R extends BaseEntityDTO<T>, T exte
         return getAllAndConvert(user -> user.isActive() ? new UserDTO(user) : null);
     } */
 
-    public ResponseEntity<List<R>> getAllFiltered(Predicate<R> filter) {
+    public ResponseEntity<List<DTO>> getAllFiltered(Predicate<DTO> filter) {
         return ResponseEntity.ok(getService().findAll(filter));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<R> getById(@PathVariable long id) {
+    public ResponseEntity<DTO> getById(@PathVariable long id) {
         return ResponseEntity.ok(getService().findById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<R> update(@PathVariable long id, @RequestBody dto dto) {
-        R existingEntity = getService().findById(id);
+    public ResponseEntity<DTO> update(@PathVariable long id, @RequestBody DTOInput dtoinput) {
+        DTO existingEntity = getService().findById(id);
         existingEntity.setId(id);
         return ResponseEntity.ok(getService().save(existingEntity));
     }

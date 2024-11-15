@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/api/users")
-public class UserRESTController extends BaseRESTController< UserDTOInput, UserDTO, User, UserDTOMapper, UserService, UserRepository> {
+public class UserRESTController extends BaseRESTController<UserDTOInput, UserDTO, User, UserDTOMapper, UserService, UserRepository> {
 
     @Autowired
     protected UserRESTController(UserService service) {
