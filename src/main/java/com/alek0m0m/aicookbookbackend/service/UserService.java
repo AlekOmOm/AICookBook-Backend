@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 public class UserService extends BaseService<UserDTOInput, UserDTO, User, UserDTOMapper, UserRepository> {
 
     @Autowired
-    public UserService(UserRepository repository, UserDTOMapper entityToDtoMapper) {
-        super(repository, entityToDtoMapper);
+    public UserService(UserRepository repository, UserDTOMapper mapper) {
+        super(repository, mapper);
     }
 
 }

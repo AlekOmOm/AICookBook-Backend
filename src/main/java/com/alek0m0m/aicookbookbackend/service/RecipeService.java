@@ -17,21 +17,18 @@ import java.util.stream.Collectors;
 
 @Service
 public class RecipeService extends BaseService<RecipeDTOInput, RecipeDTO, Recipe, RecipeDTOMapper, RecipeRepository> {
-
     private final IngredientService ingredientService;
-    private final RecipeRepository recipeRepository;
 
     @Autowired
-    protected RecipeService(RecipeRepository repository, RecipeDTOMapper recipeDTOMapper, IngredientService ingredientService, RecipeRepository recipeRepository) {
-        super(repository, recipeDTOMapper);
+    protected RecipeService(RecipeRepository repository, RecipeDTOMapper mapper, IngredientService ingredientService, RecipeRepository recipeRepository) {
+        super(ingredientService, repository, mapper);
         this.ingredientService = ingredientService;
-        this.recipeRepository = recipeRepository;
     }
 
     @Override
     protected void resetAutoIncrement() {
-        ingredientService.getRepository().resetAutoIncrement();
-        recipeRepository.resetAutoIncrement();
+        getSubServiceClass().getRepository().resetAutoIncrement();
+        getRepository().resetAutoIncrement();
     }
 
     // --------------------- CRUD ---------------------

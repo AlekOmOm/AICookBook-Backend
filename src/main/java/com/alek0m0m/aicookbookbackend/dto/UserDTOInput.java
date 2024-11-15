@@ -15,12 +15,4 @@ public class UserDTOInput {
     private String username;
     private String password;
 
-    public UserDTO toDTO() {
-
-        UserDTO userDTO = new UserDTO();
-        userDTO.setUsername(username);
-        userDTO.setPassword(password);
-        return userDTO;
-
-    }
 }

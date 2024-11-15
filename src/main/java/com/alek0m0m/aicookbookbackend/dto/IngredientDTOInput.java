@@ -26,12 +26,5 @@ public class IngredientDTOInput {
     @JsonProperty("unit")
     private String unit;
 
-    public IngredientDTO toDTO() {
-        IngredientDTO ingredientDTO = new IngredientDTO();
-        ingredientDTO.setId(getId());
-        ingredientDTO.setName(getName());
-        ingredientDTO.setAmount(getAmount());
-        ingredientDTO.setUnit(getUnit());
-        return ingredientDTO;
-    }
+
 }

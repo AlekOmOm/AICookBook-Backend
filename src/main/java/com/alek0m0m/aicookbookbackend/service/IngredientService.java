@@ -13,12 +13,9 @@ import java.util.List;
 @Service
 public class IngredientService extends BaseService<IngredientDTOInput, IngredientDTO, Ingredient, IngredientDTOMapper, IngredientRepository> {
 
-    private final IngredientRepository ingredientRepository;
-
     @Autowired
     protected IngredientService(IngredientRepository repository, IngredientDTOMapper ingredientDTOMapper, IngredientRepository ingredientRepository) {
         super(repository, ingredientDTOMapper);
-        this.ingredientRepository = ingredientRepository;
     }
 
 }

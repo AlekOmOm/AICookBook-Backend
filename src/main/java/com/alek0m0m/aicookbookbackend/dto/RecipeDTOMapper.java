@@ -24,13 +24,11 @@ public class RecipeDTOMapper extends EntityToDTOMapperImpl<RecipeDTOInput, Recip
 
 
 
-
     // ------------------ Concrete mappings ------------------
 
     @Override
     public RecipeDTO toDTO(RecipeDTOInput recipeDTOInput) {
         RecipeDTO recipeDTO = new RecipeDTO();
-
         recipeDTO.setId(recipeDTOInput.getId());
         recipeDTO.setName(recipeDTOInput.getName());
         recipeDTO.setInstructions(recipeDTOInput.getInstructions());

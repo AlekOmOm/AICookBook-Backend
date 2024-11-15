@@ -8,47 +8,20 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class IngredientDTOMapper implements EntityToDTOMapper<IngredientDTOInput, IngredientDTO, Ingredient> {
-
-    // ------------------ Interface methods ------------------
-    @Override
-    public IngredientDTO map(Ingredient ingredient) {
-        return mapIngredientToDTO(ingredient);
-    }
-
-    public List<IngredientDTO> mapAll(List<Ingredient> ingredients) {
-        return ingredients.stream().map(this::mapIngredientToDTO).toList();
-    }
-
-    public Ingredient map(IngredientDTO ingredientDTO) {
-        return mapDTOToIngredient(ingredientDTO);
-    }
-
-    public List<Ingredient> mapAllDTOs(List<IngredientDTO> ingredientDTOs) {
-        return ingredientDTOs.stream().map(this::mapDTOToIngredient).toList();
-    }
-
-    public IngredientDTO map(IngredientDTOInput dtoInput) {
-        return dtoInput.toDTO();
-    }
-
+public class IngredientDTOMapper extends EntityToDTOMapperImpl<IngredientDTOInput, IngredientDTO, Ingredient> {
 
     @Override
-    public IngredientDTO apply(Ingredient ingredient) {
-        return EntityToDTOMapper.super.apply(ingredient);
-    }
-
-    // ------------------ Concrete mappings ------------------
-    private IngredientDTO mapIngredientToDTO(Ingredient ingredient) {
+    public IngredientDTO toDTO(IngredientDTOInput dtoInput) {
         IngredientDTO ingredientDTO = new IngredientDTO();
-        ingredientDTO.setId(ingredient.getId());
-        ingredientDTO.setName(ingredient.getName());
-        ingredientDTO.setAmount(ingredient.getAmount());
-        ingredientDTO.setUnit(ingredient.getUnit());
+        ingredientDTO.setId(dtoInput.getId());
+        ingredientDTO.setName(dtoInput.getName());
+        ingredientDTO.setAmount(dtoInput.getAmount());
+        ingredientDTO.setUnit(dtoInput.getUnit());
         return ingredientDTO;
     }
 
-    private Ingredient mapDTOToIngredient(IngredientDTO ingredientDTO) {
+    @Override
+    public Ingredient toEntity(IngredientDTO ingredientDTO) {
         Ingredient ingredient = new Ingredient();
         ingredient.setId(ingredientDTO.getId());
         ingredient.setName(ingredientDTO.getName());
@@ -57,4 +30,13 @@ public class IngredientDTOMapper implements EntityToDTOMapper<IngredientDTOInput
         return ingredient;
     }
 
+    @Override
+    public IngredientDTO entityToDTO(Ingredient ingredient) {
+        IngredientDTO ingredientDTO = new IngredientDTO();
+        ingredientDTO.setId(ingredient.getId());
+        ingredientDTO.setName(ingredient.getName());
+        ingredientDTO.setAmount(ingredient.getAmount());
+        ingredientDTO.setUnit(ingredient.getUnit());
+        return ingredientDTO;
+    }
 }

@@ -15,11 +15,19 @@ public abstract class BaseService<dtoinput, R extends BaseEntityDTO<T>, T extend
 
     private final RepositoryClass repository;
     private final DtoMapper mapper;
+    private final BaseService subServiceClass;
 
     @Autowired
     protected BaseService(RepositoryClass repository, DtoMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
+        this.subServiceClass = null;
+    }
+    @Autowired
+    protected BaseService(BaseService subServiceClass, RepositoryClass repository, DtoMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
+        this.subServiceClass = subServiceClass;
     }
 
     public BaseRepository<T> getRepository() {
@@ -27,6 +35,9 @@ public abstract class BaseService<dtoinput, R extends BaseEntityDTO<T>, T extend
     }
     public EntityToDTOMapper<dtoinput, R, T> getDtoMapper() {
         return mapper;
+    }
+    public BaseService getSubServiceClass() {
+        return subServiceClass;
     }
 
     protected void resetAutoIncrement() {
@@ -37,6 +48,8 @@ public abstract class BaseService<dtoinput, R extends BaseEntityDTO<T>, T extend
     @Transactional
     public R save(BaseEntityDTO<T> entityDTO) {
         resetAutoIncrement();
+
+        System.out.println(" Saved: " + entityDTO);
 
         return mapper.entityToDTO(
                 getRepository()
