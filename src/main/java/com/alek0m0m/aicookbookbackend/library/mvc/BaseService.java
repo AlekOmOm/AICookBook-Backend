@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
-public abstract class BaseService<dtoinput, R extends BaseEntityDTO<T>, T extends BaseEntity, DtoMapper extends EntityToDTOMapper<dtoinput, R, T>, RepositoryClass extends BaseRepository<T>> implements BaseServiceInterface<R,T> {
+public abstract class BaseService<dtoinput, R extends BaseEntityDTO<T>, T extends BaseEntity, DtoMapper extends EntityToDTOMapperImpl<dtoinput, R, T>, RepositoryClass extends BaseRepository<T>> implements BaseServiceInterface<R,T> {
 
     private final RepositoryClass repository;
     private final DtoMapper mapper;
@@ -36,17 +36,11 @@ public abstract class BaseService<dtoinput, R extends BaseEntityDTO<T>, T extend
     // --------------------- CRUD ---------------------
     @Transactional
     public R save(BaseEntityDTO<T> entityDTO) {
-        System.out.println("Saving entity: " + entityDTO);
-
-        T entity = entityDTO.toEntity();
-
         resetAutoIncrement();
 
-        System.out.println("Entity saved: " + entity);
-
-        return mapper.apply(
+        return mapper.entityToDTO(
                 getRepository()
-                        .save(entity));
+                .save(entityDTO.toEntity()));
     }
 
     @Transactional
@@ -91,7 +85,8 @@ public abstract class BaseService<dtoinput, R extends BaseEntityDTO<T>, T extend
     public R findById(long id) {
         return getRepository().findById(id)
                 .map(mapper)
-                .orElseThrow(() -> new EntityNotFoundException("Entity not found"));
+                .orElseThrow(()
+                        -> new EntityNotFoundException("Entity not found"));
     }
 
 
@@ -103,8 +98,8 @@ public abstract class BaseService<dtoinput, R extends BaseEntityDTO<T>, T extend
 
     // delete all
     public void deleteAll() {
-        getRepository().deleteAll();
         resetAutoIncrement();
+        getRepository().deleteAll();
     }
 
 

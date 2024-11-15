@@ -54,7 +54,6 @@ public class RecipeDTO extends BaseEntityDTO<Recipe> {
     }
 
     private List<Ingredient> mapIngredients(List<IngredientDTO> ingredients) {
-
         return ingredients.stream().map(this::mapIngredient).collect(Collectors.toList());
     }
 

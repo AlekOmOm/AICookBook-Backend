@@ -3,12 +3,14 @@ package com.alek0m0m.aicookbookbackend.dto;
 import com.alek0m0m.aicookbookbackend.library.jpa.*;
 import com.alek0m0m.aicookbookbackend.library.mvc.*;
 import com.alek0m0m.aicookbookbackend.model.User;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class UserDTO extends BaseEntityDTO<User> {
 
     private String username;

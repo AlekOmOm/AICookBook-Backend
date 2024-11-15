@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class RecipeDTOMapper implements EntityToDTOMapper<RecipeDTOInput, RecipeDTO, Recipe> {
+public class RecipeDTOMapper extends EntityToDTOMapperImpl<RecipeDTOInput, RecipeDTO, Recipe> {
 
     private final IngredientDTOMapper ingredientDTOMapper;
     @Autowired
@@ -20,33 +20,59 @@ public class RecipeDTOMapper implements EntityToDTOMapper<RecipeDTOInput, Recipe
 
     // ------------------ Interface methods ------------------
 
-    @Override
-    public RecipeDTO map(RecipeDTOInput recipeDTOInput) {
-        return recipeDTOInput.toDTO();
-    }
-
-    @Override
-    public RecipeDTO map(Recipe recipe) {
-        return mapRecipeToDTO(recipe);
-    }
-
-    @Override
-    public Recipe map(RecipeDTO dto) {
-        return dto.toEntity();
-    }
-
-
-    public List<RecipeDTO> mapAll(List<Recipe> RecipeDTOs) {
-        return RecipeDTOs.stream().map(this::mapRecipeToDTO).toList();
-    }
+    // map methods implemented from Abstract class
 
 
 
 
     // ------------------ Concrete mappings ------------------
 
+    @Override
+    public RecipeDTO toDTO(RecipeDTOInput recipeDTOInput) {
+        RecipeDTO recipeDTO = new RecipeDTO();
 
-    public RecipeDTO mapRecipeToDTO(Recipe recipe) {
+        recipeDTO.setId(recipeDTOInput.getId());
+        recipeDTO.setName(recipeDTOInput.getName());
+        recipeDTO.setInstructions(recipeDTOInput.getInstructions());
+        recipeDTO.setTags(recipeDTOInput.getTags());
+        recipeDTO.setServings(recipeDTOInput.getServings());
+        recipeDTO.setPrepTime(recipeDTOInput.getPrepTime());
+        recipeDTO.setCookTime(recipeDTOInput.getCookTime());
+        recipeDTO.setTotalTime(recipeDTOInput.getTotalTime());
+
+        if (recipeDTOInput.getIngredients() == null) {
+            return recipeDTO;
+        }
+        recipeDTO.setIngredients(recipeDTOInput.getIngredients());
+        return recipeDTO;
+    }
+
+    public Recipe toEntity(RecipeDTO recipeDTO) {
+        Recipe recipe = new Recipe();
+        recipe.setId(recipeDTO.getId());
+        recipe.setName(recipeDTO.getName());
+        recipe.setInstructions(recipeDTO.getInstructions());
+        recipe.setTags(recipeDTO.getTags());
+        recipe.setServings(recipeDTO.getServings());
+        recipe.setPrepTime(recipeDTO.getPrepTime());
+        recipe.setCookTime(recipeDTO.getCookTime());
+        recipe.setTotalTime(recipeDTO.getTotalTime());
+
+        if (recipeDTO.getIngredients() != null) {
+            recipe.setIngredients(recipeDTO.getIngredients()
+                    .stream().map(ingredientDTO -> ingredientDTOMapper.map(ingredientDTO))
+                    .collect(Collectors.toList())
+            );
+        } else {
+            recipe.setIngredients(null);
+            System.out.println("debug check for"+ recipeDTO.getName());
+            System.out.println("RecipeDTOMapper.mapDTOToRecipe: ingredients is null");
+        }
+        return recipe;
+    }
+
+    @Override
+    public RecipeDTO entityToDTO(Recipe recipe) {
         RecipeDTO recipeDTO = new RecipeDTO();
         recipeDTO.setId(recipe.getId());
         recipeDTO.setName(recipe.getName());
@@ -71,28 +97,11 @@ public class RecipeDTOMapper implements EntityToDTOMapper<RecipeDTOInput, Recipe
         return recipeDTO;
     }
 
-    public Recipe mapDTOToRecipe(RecipeDTO recipeDTO) {
-        Recipe recipe = new Recipe();
-        recipe.setId(recipeDTO.getId());
-        recipe.setName(recipeDTO.getName());
-        recipe.setInstructions(recipeDTO.getInstructions());
-        recipe.setTags(recipeDTO.getTags());
-        recipe.setServings(recipeDTO.getServings());
-        recipe.setPrepTime(recipeDTO.getPrepTime());
-        recipe.setCookTime(recipeDTO.getCookTime());
-        recipe.setTotalTime(recipeDTO.getTotalTime());
 
-        if (recipeDTO.getIngredients() != null) {
-            recipe.setIngredients(recipeDTO.getIngredients()
-                    .stream().map(ingredientDTO -> ingredientDTOMapper.map(ingredientDTO))
-                    .collect(Collectors.toList())
-            );
-        } else {
-            recipe.setIngredients(null);
-            System.out.println("debug check for"+ recipeDTO.getName());
-            System.out.println("RecipeDTOMapper.mapDTOToRecipe: ingredients is null");
-        }
-        return recipe;
-    }
+
+
+
+
+
 
 }

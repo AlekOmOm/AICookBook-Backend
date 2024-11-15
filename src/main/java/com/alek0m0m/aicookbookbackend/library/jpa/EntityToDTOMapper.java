@@ -1,7 +1,5 @@
 package com.alek0m0m.aicookbookbackend.library.jpa;
 
-import com.alek0m0m.aicookbookbackend.dto.IngredientDTO;
-import com.alek0m0m.aicookbookbackend.model.Ingredient;
 import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
@@ -9,15 +7,31 @@ import java.util.function.Function;
 
 @Service
 public interface EntityToDTOMapper<dtoinput, R extends BaseEntityDTO<T>, T extends BaseEntity> extends Function<T, R> {
-    R map(dtoinput dtoinput);
 
-    T map(R dto);
+    R toDTO(dtoinput dtoinput);
 
-    R map(T entity);
+    T toEntity(R dto);
 
-    @Override
-    default R apply(T t) {
-        return map(t);
+    R entityToDTO(T entity);
+
+    BaseEntityDTO<T> toDTOBase(dtoinput dtoinput);
+
+    BaseEntity toEntityBase(BaseEntityDTO<T> dto);
+
+    BaseEntityDTO<T> entityToDTOBase(BaseEntity entity);
+
+    // apply using all the converters
+
+    default R map(T t) {
+        return entityToDTO(t);
+    }
+
+    default R map(dtoinput dtoinput) {
+        return toDTO(dtoinput);
+    }
+
+    default T map(R dto) {
+        return toEntity(dto);
     }
 
 }

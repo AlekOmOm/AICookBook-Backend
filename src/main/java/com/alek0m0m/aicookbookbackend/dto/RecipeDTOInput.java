@@ -45,21 +45,4 @@ public class RecipeDTOInput {
     @OneToMany
     @JsonProperty("ingredients")
     private List<IngredientDTO> ingredients;
-
-    public RecipeDTO toDTO() {
-        RecipeDTO recipeDTO = new RecipeDTO();
-        recipeDTO.setId(this.id);
-        recipeDTO.setName(this.name);
-        recipeDTO.setInstructions(this.instructions);
-        recipeDTO.setTags(this.tags);
-        recipeDTO.setServings(this.servings);
-        recipeDTO.setPrepTime(this.prepTime);
-        recipeDTO.setCookTime(this.cookTime);
-        recipeDTO.setTotalTime(this.totalTime);
-        if (this.ingredients == null) {
-            return recipeDTO;
-        }
-        recipeDTO.setIngredients(this.ingredients);
-        return recipeDTO;
-    }
 }
