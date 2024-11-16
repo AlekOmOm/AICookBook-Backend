@@ -27,5 +27,4 @@ public abstract class BaseEntity implements Serializable {
             this.id = id;
         }
     }
-
 }

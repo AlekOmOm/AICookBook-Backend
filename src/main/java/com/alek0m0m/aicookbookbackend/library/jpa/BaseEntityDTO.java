@@ -20,5 +20,4 @@ public abstract class BaseEntityDTO<T extends BaseEntity>{
     private long id;
 
     public abstract  T toEntity();
-
 }
