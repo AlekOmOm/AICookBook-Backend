@@ -1,6 +1,7 @@
 package com.alek0m0m.aicookbookbackend.service;
 
 import com.alek0m0m.aicookbookbackend.dto.UserDTOInput;
+import com.alek0m0m.aicookbookbackend.library.jpa.BaseEntityDTO;
 import com.alek0m0m.aicookbookbackend.library.mvc.*;
 import com.alek0m0m.aicookbookbackend.dto.UserDTOMapper;
 import com.alek0m0m.aicookbookbackend.dto.UserDTO;
@@ -16,5 +17,11 @@ public class UserService extends BaseService<UserDTOInput, UserDTO, User, UserDT
     public UserService(UserRepository repository, UserDTOMapper mapper) {
         super(repository, mapper);
     }
+
+    @Override
+    protected void setSubEntities(BaseEntityDTO<User> entityDTO) {
+        System.out.println(" user no sub entities");
+    }
+
 
 }

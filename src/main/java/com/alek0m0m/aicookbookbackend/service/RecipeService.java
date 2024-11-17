@@ -20,7 +20,7 @@ public class RecipeService extends BaseService<RecipeDTOInput, RecipeDTO, Recipe
     private final IngredientService ingredientService;
 
     @Autowired
-    protected RecipeService(RecipeRepository repository, RecipeDTOMapper mapper, IngredientService ingredientService, RecipeRepository recipeRepository) {
+    protected RecipeService(IngredientService ingredientService, RecipeDTOMapper mapper, RecipeRepository repository) {
         super(ingredientService, repository, mapper);
         this.ingredientService = ingredientService;
     }
@@ -32,6 +32,32 @@ public class RecipeService extends BaseService<RecipeDTOInput, RecipeDTO, Recipe
     }
 
     // --------------------- CRUD ---------------------
+
+
+    @Override
+    public void setSubEntities(BaseEntityDTO recipeDTOprm) {
+        RecipeDTO recipeDTO = (RecipeDTO) recipeDTOprm;
+        System.out.println("setSubEntities called");
+        recipeDTO.setIngredients(recipeDTO.getIngredients().stream()
+                .map(ingredientDTO -> ingredientService.save(ingredientDTO))
+                .collect(Collectors.toList()));
+    }
+
+
+    @Transactional
+    public RecipeDTO saveSubEntities(RecipeDTO recipeDTO) {
+        recipeDTO.setIngredients(recipeDTO.getIngredients().stream()
+                .map(ingredientDTO -> {
+                    if (ingredientDTO.getId() == 0) {
+                        return ingredientService.save(ingredientDTO);
+                    } else {
+                        return ingredientService.update(ingredientDTO);
+                    }
+                })
+                .collect(Collectors.toList()));
+        return recipeDTO;
+    }
+
 
     @Override
     public List<RecipeDTO> findAll() {

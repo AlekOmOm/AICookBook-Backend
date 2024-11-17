@@ -43,7 +43,9 @@ public class RecipeDTO extends BaseEntityDTO<Recipe> {
         recipe.setTotalTime(getTotalTime());
 
         if (getIngredients() != null) {
-            recipe.setIngredients(getIngredients().stream().map(IngredientDTO::toEntity).collect(Collectors.toList()));
+            recipe.setIngredients(getIngredients().stream()
+                    .map(IngredientDTO::toEntity)
+                    .collect(Collectors.toList()));
         } else {
             recipe.setIngredients(null);
             System.out.println("debug check for"+ recipe.getName());

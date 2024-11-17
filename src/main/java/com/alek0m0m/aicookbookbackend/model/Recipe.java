@@ -2,6 +2,7 @@ package com.alek0m0m.aicookbookbackend.model;
 
 import com.alek0m0m.aicookbookbackend.library.jpa.*;
 import com.alek0m0m.aicookbookbackend.library.mvc.*;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.*;
@@ -20,6 +21,7 @@ import java.util.List;
 public class Recipe extends BaseEntity {
 
     private String name;
+    @Column(columnDefinition = "TEXT")
     private String instructions;
     private String tags;
     private int servings;

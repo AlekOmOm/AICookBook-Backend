@@ -14,11 +14,13 @@ public abstract class BaseRESTController<DTOInput, DTO extends BaseEntityDTO<Ent
 
     private final BaseService<DTOInput, DTO, Entity, Mapper, RepositoryClass> baseService;
     protected final ServiceClass service;
+    protected final Mapper mapper;
 
     @Autowired
     protected BaseRESTController(ServiceClass service) {
         this.baseService = service;
         this.service = service;
+        mapper = (Mapper) service.getDtoMapper();
     }
 
     public BaseService <DTOInput, DTO, Entity, Mapper, BaseRepository<Entity>> getService() {
@@ -36,6 +38,10 @@ public abstract class BaseRESTController<DTOInput, DTO extends BaseEntityDTO<Ent
         if (dtoinput == null) {
             return ResponseEntity.badRequest().build();
         }
+        System.out.println();
+        System.out.println(" dtoinput: " + dtoinput);
+        System.out.println();
+
         return ResponseEntity.ok(getService().save(map(dtoinput)));
     }
 

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -49,15 +50,20 @@ public abstract class BaseService<dtoinput, R extends BaseEntityDTO<T>, T extend
     public R save(BaseEntityDTO<T> entityDTO) {
         resetAutoIncrement();
 
-        System.out.println(" Saved: " + entityDTO);
+        T t = entityDTO.toEntity();
+            debugPrint("save()", t.toString());
 
-        return mapper.entityToDTO(
+        R e = mapper.entityToDTO(
                 getRepository()
                 .save(entityDTO.toEntity()));
+
+            debugPrint("save()", e.toString());
+        return e;
     }
 
     @Transactional
     public List<R> saveAll(List<BaseEntityDTO<T>> entityDTOs) {
+        resetAutoIncrement();
         return getRepository().saveAll(
                 entityDTOs.stream()
                         .map(BaseEntityDTO::toEntity)
@@ -69,6 +75,7 @@ public abstract class BaseService<dtoinput, R extends BaseEntityDTO<T>, T extend
 
     @Transactional
     public R update(BaseEntityDTO<T> entityDTO) {
+        resetAutoIncrement();
         return mapper.apply(
                 getRepository()
                         .save(entityDTO.toEntity()));
@@ -85,12 +92,6 @@ public abstract class BaseService<dtoinput, R extends BaseEntityDTO<T>, T extend
         return repository.findAll().stream()
                 .map(mapper)
                 .filter(filter)
-                .collect(Collectors.toList());
-    }
-
-    public List<R> findAllAndConvertToDTO() {
-        return repository.findAll().stream()
-                .map(mapper)
                 .collect(Collectors.toList());
     }
 
@@ -115,5 +116,13 @@ public abstract class BaseService<dtoinput, R extends BaseEntityDTO<T>, T extend
         getRepository().deleteAll();
     }
 
+    // ------------------- Helper methods -------------------
+
+    private void debugPrint(String method, String message) {
+        System.out.println();
+        System.out.println("debug check for "+ method);
+        System.out.println(" "+message);
+        System.out.println();
+    }
 
 }

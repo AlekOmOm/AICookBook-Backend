@@ -39,10 +39,21 @@ public class RecipeDTOMapper extends EntityToDTOMapperImpl<RecipeDTOInput, Recip
         recipeDTO.setTotalTime(recipeDTOInput.getTotalTime());
 
         if (recipeDTOInput.getIngredients() == null) {
+            debugPrint("RecipeDTOMapper.mapDTOToRecipe: ", "ingredients is null");
             return recipeDTO;
+        } else {
+            debugPrint("RecipeDTOMapper.mapDTOToRecipe: ", recipeDTOInput.getIngredients().toString());
         }
         recipeDTO.setIngredients(recipeDTOInput.getIngredients());
+        debugPrint("RecipeDTOMapper.mapDTOToRecipe: ", recipeDTO.toString());
         return recipeDTO;
+    }
+
+    private void debugPrint(String method, String message) {
+        System.out.println();
+        System.out.println("debug check for"+ method);
+        System.out.println(" "+message);
+        System.out.println();
     }
 
     public Recipe toEntity(RecipeDTO recipeDTO) {
@@ -94,12 +105,5 @@ public class RecipeDTOMapper extends EntityToDTOMapperImpl<RecipeDTOInput, Recip
 
         return recipeDTO;
     }
-
-
-
-
-
-
-
 
 }

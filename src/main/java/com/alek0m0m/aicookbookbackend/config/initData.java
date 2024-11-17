@@ -59,7 +59,7 @@ public class initData implements CommandLineRunner {
         recipe.setIngredients(List.of(i1, i2));
 
         // Save recipe
-        recipeService.save(recipeDTOMapper.apply(recipe));
+        recipeService.save(recipeDTOMapper.map(recipe));
     }
 
     private void userData() {

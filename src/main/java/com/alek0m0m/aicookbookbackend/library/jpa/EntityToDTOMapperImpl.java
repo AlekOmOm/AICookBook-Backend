@@ -48,4 +48,12 @@ public abstract class EntityToDTOMapperImpl<dtoinput, R extends BaseEntityDTO<T>
         return entityToDTO(entity);
     }
 
+
+    private void debugPrint(String method, String message) {
+        System.out.println();
+        System.out.println("debug check for"+ method);
+        System.out.println(" "+message);
+        System.out.println();
+    }
+
 }
