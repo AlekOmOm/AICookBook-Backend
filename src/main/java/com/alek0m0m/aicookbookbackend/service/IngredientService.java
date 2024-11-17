@@ -19,24 +19,5 @@ public class IngredientService extends BaseService<IngredientDTOInput, Ingredien
         super(repository, ingredientDTOMapper);
     }
 
-    @Override
-    protected void setSubEntities(BaseEntityDTO<Ingredient> entityDTO) {
-
-        System.out.println(" ingredients no sub entities");
-        System.out.println(" entityDTO: " + entityDTO);
-    }
-
-
-    @Transactional
-    public IngredientDTO save(IngredientDTO ingredientDTO) {
-        Ingredient ingredient = ingredientDTO.toEntity();
-        return getDtoMapper().entityToDTO(getRepository().save(ingredient));
-    }
-
-    @Transactional
-    public IngredientDTO update(IngredientDTO ingredientDTO) {
-        Ingredient ingredient = ingredientDTO.toEntity();
-        return getDtoMapper().entityToDTO(getRepository().save(ingredient));
-    }
 
 }

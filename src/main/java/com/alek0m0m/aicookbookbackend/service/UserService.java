@@ -18,10 +18,6 @@ public class UserService extends BaseService<UserDTOInput, UserDTO, User, UserDT
         super(repository, mapper);
     }
 
-    @Override
-    protected void setSubEntities(BaseEntityDTO<User> entityDTO) {
-        System.out.println(" user no sub entities");
-    }
 
 
 }

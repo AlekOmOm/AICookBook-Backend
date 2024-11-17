@@ -34,16 +34,6 @@ public class RecipeService extends BaseService<RecipeDTOInput, RecipeDTO, Recipe
     // --------------------- CRUD ---------------------
 
 
-    @Override
-    public void setSubEntities(BaseEntityDTO recipeDTOprm) {
-        RecipeDTO recipeDTO = (RecipeDTO) recipeDTOprm;
-        System.out.println("setSubEntities called");
-        recipeDTO.setIngredients(recipeDTO.getIngredients().stream()
-                .map(ingredientDTO -> ingredientService.save(ingredientDTO))
-                .collect(Collectors.toList()));
-    }
-
-
     @Transactional
     public RecipeDTO saveSubEntities(RecipeDTO recipeDTO) {
         recipeDTO.setIngredients(recipeDTO.getIngredients().stream()
