@@ -5,20 +5,30 @@ import com.alek0m0m.aicookbookbackend.model.User;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserDTOMapper implements EntityToDTOMapper<User, UserDTO> {
-
+public class UserDTOMapper extends EntityToDTOMapperImpl<UserDTOInput, UserDTO, User> {
+    
     @Override
-    public UserDTO apply(User entity) {
-        UserDTO dto = new UserDTO();
-        dto.setId(entity.getId());
-        dto.setUsername(entity.getUsername());
-        dto.setPassword(entity.getPassword());
-        return dto;
+    public UserDTO toDTO(UserDTOInput dtoInput) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername(dtoInput.getUsername());
+        userDTO.setPassword(dtoInput.getPassword());
+        return userDTO;
     }
 
     @Override
-    public UserDTO map(User entity) {
-        return apply(entity);
+    public User toEntity(UserDTO userDTO) {
+        User user = new User();
+        user.setUsername(userDTO.getUsername());
+        user.setPassword(userDTO.getPassword());
+        return user;
     }
 
+    @Override
+    public UserDTO entityToDTO(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setPassword(user.getPassword());
+        return userDTO;
+    }
 }

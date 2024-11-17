@@ -6,16 +6,17 @@ import com.alek0m0m.aicookbookbackend.library.mvc.*;
 import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.stereotype.Component;
 
 @Entity
 @Component
 @Getter
 @Setter
+@ToString
 public class User extends BaseEntity {
 
     private String username;
     private String password;
-
 
 }
