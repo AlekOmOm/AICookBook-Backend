@@ -4,6 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### Github Actions ###
+.github/workflows/
+
 ### STS ###
 .apt_generated
 .classpath
