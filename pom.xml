@@ -109,7 +109,6 @@
                 <version>3.2.5</version>
                 <configuration>
                     <excludes>
-                        <!--- unfinished test files  TODO: Remove once Test classes fully functional -->
                         <exclude>**/AiCookBookBackendApplicationTests.java</exclude>
                     </excludes>
 
